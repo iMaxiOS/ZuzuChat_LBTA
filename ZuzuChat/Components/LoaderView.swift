@@ -10,21 +10,10 @@ import SwiftUI
 struct LoaderView: View {
   var body: some View {
     ZStack {
-      Color.bg
-        .ignoresSafeArea()
-      
-      Image(systemName: "video.and.waveform.fill")
+      Image(.iconForLoader)
         .resizable()
-        .frame(width: 170, height: 100)
-        .foregroundStyle(Color(.pink))
-        .overlay {
-          Text("Z")
-            .font(.system(size: 45, weight: .bold))
-            .foregroundStyle(.bg)
-            .offset(y: -10)
-        }
-//        .transition(.scale(scale: 3))
     }
+    .ignoresSafeArea()
     .overlay(alignment: .bottom) {
       CircularGrowingLoader()
         .padding(.bottom, 40)

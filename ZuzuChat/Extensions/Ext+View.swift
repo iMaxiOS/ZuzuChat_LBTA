@@ -20,6 +20,7 @@ enum NavigationType: Hashable {
   case pinOrForget(type: PushType)
   case forgotPassword
   case report
+  case message(article: NewsResponse)
 }
 
 @MainActor
@@ -71,6 +72,10 @@ extension View {
           .environmentObject(session)
       case .report:
         ReportView()
+          .toolbarVisibility(.hidden, for: .navigationBar)
+          .environmentObject(session)
+      case .message(let article):
+        MessageView(article: article)
           .toolbarVisibility(.hidden, for: .navigationBar)
           .environmentObject(session)
       }

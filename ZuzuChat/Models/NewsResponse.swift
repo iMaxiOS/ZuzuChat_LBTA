@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct NewsAPIResponse: Codable {
+struct NewsAPIResponse: Codable, Hashable {
   let status: String
   let totalResults: Int
   let results: [NewsResponse]
 }
 
-struct NewsResponse: Codable {
+struct NewsResponse: Codable, Hashable {
   let articleId: String
   let title: String
   let link: String
@@ -34,4 +34,28 @@ struct NewsResponse: Codable {
   let category: [String]
   let sentiment: String
   let sentimentStats: String?
+  
+  
+  init() {
+    self.articleId = ""
+    self.title = ""
+    self.link = ""
+    self.keywords = []
+    self.creator = []
+    self.description = nil
+    self.content = nil
+    self.pubDate = ""
+    self.imageUrl = nil
+    self.videoUrl = nil
+    self.sourceId = ""
+    self.sourceName = ""
+    self.sourcePriority = -1
+    self.sourceUrl = ""
+    self.sourceIcon = ""
+    self.language = ""
+    self.country = []
+    self.category = []
+    self.sentiment = ""
+    self.sentimentStats = nil
+  }
 }

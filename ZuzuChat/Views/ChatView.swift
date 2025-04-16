@@ -55,6 +55,9 @@ struct ChatView: View {
             VStack(alignment: .leading, spacing: 16) {
               ForEach(vm.articles, id: \.articleId) { article in
                 ChatCell(article: article)
+                  .onTapGesture {
+                    session.navigate(to: .message(article: article))
+                  }
               }
             }
             .padding(.bottom, 60)

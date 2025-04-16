@@ -16,13 +16,15 @@ struct Message: Identifiable {
 }
 
 struct MessageView: View {
+  var article: NewsResponse
+  
   @State private var messages: [Message] = [
-    Message(text: "Hello, good morning", isSent: false, time: "09:41"),
-    Message(text: "I am a Customer Service. Is there anything I can help you with? 😊", isSent: false, time: "09:41"),
-    Message(text: "Hi, I'm having problems with my order & payment", isSent: true, time: "09:41"),
-    Message(text: "Can you help me?", isSent: true, time: "09:41"),
-    Message(text: "Of course..", isSent: false, time: "09:41"),
-    Message(text: "Can you tell me the problem you are having? So I can help solve it 😊", isSent: false, time: "09:41")
+    Message(text: "Hello, good morning", isSent: false, time: "09:11"),
+    Message(text: "I am a Customer Service. Is there anything I can help you with? 😊", isSent: false, time: "09:15"),
+    Message(text: "Hi, I'm having problems with my order & payment", isSent: true, time: "09:16"),
+    Message(text: "Can you help me?", isSent: true, time: "09:24"),
+    Message(text: "Of course..", isSent: false, time: "09:31"),
+    Message(text: "Can you tell me the problem you are having? So I can help solve it 😊", isSent: false, time: "09:45")
   ]
   @State private var newMessage: String = ""
   
@@ -30,14 +32,8 @@ struct MessageView: View {
     ZStack {
       Color.bg.ignoresSafeArea()
       
-      VStack(alignment: .leading, spacing: 20) {
-        HStack {
-          BackButton()
-          
-          Text("Messages")
-            .font(.headline.bold().monospaced())
-          
-        }
+      VStack(alignment: .leading, spacing: 5) {
+        BackButton()
         
         VStack {
           ScrollViewReader { scrollView in
@@ -61,12 +57,22 @@ struct MessageView: View {
         }
       }
       .foregroundStyle(.white)
+      .overlay(alignment: .top) {
+        HStack {
+          Text(article.sourceName)
+            .font(.headline.bold().monospaced())
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.top, 10)
+        }
+      }
     }
   }
-  
-  private func sendMessage() {
+}
+
+private extension MessageView {
+  func sendMessage() {
     guard !newMessage.isEmpty else { return }
-    let message = Message(text: newMessage, isSent: true, time: "09:41")
+    let message = Message(text: newMessage, isSent: true, time: Date.now.formatted(date: .omitted, time: .shortened))
     messages.append(message)
     newMessage = ""
   }
@@ -118,10 +124,10 @@ struct ChatInputView: View {
           .clipShape(Circle())
       }
     }
-    .padding()
+    .padding([.horizontal, .bottom])
   }
 }
 
 #Preview {
-  MessageView()
+  MessageView(article: NewsResponse.init())
 }
