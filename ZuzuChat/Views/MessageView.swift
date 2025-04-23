@@ -45,8 +45,10 @@ struct MessageView: View {
               }
             }
             .onChange(of: messages.count, { oldValue, newValue in
-              withAnimation {
-                scrollView.scrollTo(messages.last?.id, anchor: .bottom)
+              if let lastID = messages.last?.id {
+                withAnimation {
+                  scrollView.scrollTo(lastID, anchor: .bottom)
+                }
               }
             })
           }
@@ -123,6 +125,7 @@ struct ChatInputView: View {
           .background(Color(.pink))
           .clipShape(Circle())
       }
+      .disabled(newMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
     }
     .padding([.horizontal, .bottom])
   }
