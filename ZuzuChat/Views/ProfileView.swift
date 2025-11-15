@@ -93,6 +93,9 @@ private extension ProfileView {
               ProfileRow(icon: "rectangle.portrait.and.arrow.right", title: "Logout") {
                 session.logoutSession()
               }
+              ProfileRow(icon: "trash", title: "Delete account") {
+                session.deleteAccountSession()
+              }
             }
           }
           .padding(.bottom, 50)
@@ -116,14 +119,14 @@ struct ProfileRow: View {
     } label: {
       HStack(spacing: 15) {
         Image(systemName: icon)
-          .foregroundColor(title == "Logout" ? .red : .gray)
+          .foregroundColor(title == "Delete account" ? .red : .gray)
           .imageScale(.large)
           .bold()
           .frame(width: 25)
         
         Text(title)
           .font(.subheadline.bold().monospaced())
-          .foregroundStyle(title == "Logout" ? .red : .white)
+          .foregroundStyle(title == "Delete account" ? .red : .white)
         
         Spacer()
         
@@ -138,7 +141,7 @@ struct ProfileRow: View {
             .padding(.trailing, 2)
             .toggleStyle(SwitchToggleStyle(tint: .green))
         } else {
-          Image(systemName: title == "Logout" ? "" : "chevron.right")
+          Image(systemName: title == "Logout" ? "" : title == "Delete account" ? "" : "chevron.right")
             .foregroundColor(.gray)
             .imageScale(.small).bold()
         }

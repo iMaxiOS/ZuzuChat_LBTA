@@ -13,7 +13,7 @@ struct FloatingActionButton: View {
   var body: some View {
     ZStack {
       if isExpanded {
-        VisualEffectBlur(blurStyle: .systemThinMaterial)
+        VisualEffectBlur(blurStyle: .systemUltraThinMaterialDark)
           .ignoresSafeArea()
       }
       

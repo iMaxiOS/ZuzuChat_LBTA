@@ -83,7 +83,7 @@ struct MainView: View {
 //      )
       
       if offsetComment == 0 || offsetShare == 0 {
-        VisualEffectBlur(blurStyle: .systemThinMaterial)
+        VisualEffectBlur(blurStyle: .systemUltraThinMaterialDark)
       }
       
       ShareView(offsetY: $offsetShare)

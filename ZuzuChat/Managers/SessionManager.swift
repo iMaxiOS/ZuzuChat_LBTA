@@ -23,8 +23,10 @@ final class SessionManager: ObservableObject {
       let currentUser = UserManager.shared.loadUser()
       _user = .init(wrappedValue: currentUser ?? .init())
       isAuthorized = true
+      print(isAuthorized)
     } else {
       isAuthorized = false
+      print(isAuthorized)
     }
   }
   
@@ -33,6 +35,11 @@ final class SessionManager: ObservableObject {
   }
   
   func logoutSession() {
+    isAuthorized = false
+    navigatePath.removeAll()
+  }
+  
+  func deleteAccountSession() {
     UserManager.shared.deleteUser()
     isAuthorized = false
     navigatePath.removeAll()

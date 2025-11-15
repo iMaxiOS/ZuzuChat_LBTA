@@ -19,7 +19,7 @@ final class SignInViewModel {
       return false
     }
     
-    if email == "admin" && password == "123456" {
+    if email == "Admin" && password == "123456" {
       return true
     }
     

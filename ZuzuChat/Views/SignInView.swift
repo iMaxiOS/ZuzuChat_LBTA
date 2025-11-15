@@ -67,14 +67,14 @@ struct SignInView: View {
           .padding(.vertical, 10)
           
           Button {
-              let isValid = vm.checkingCredentials()
-              isCheckCredentials = !isValid
-              
-              if isValid {
-                session.user.email = vm.email
-                session.user.password = vm.password
-                session.navigate(to: .chooseInterest)
-              }
+            let isValid = vm.checkingCredentials()
+            isCheckCredentials = !isValid
+            
+            if isValid {
+              session.user.email = vm.email
+              session.user.password = vm.password
+              session.navigate(to: session.isAuthorized ? .main : .chooseInterest)
+            }
           } label: {
             Text("Sign In")
               .font(.subheadline.bold().monospaced())
@@ -118,7 +118,7 @@ struct SignInView: View {
           
           HStack(spacing: 20) {
             Button {
-
+              
             } label: {
               Image(.facebook)
                 .resizable()
