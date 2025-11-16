@@ -27,7 +27,7 @@ struct ChatView: View {
             
             Spacer()
           }
-          .padding(.horizontal, 20)
+          .padding(.horizontal, 10)
           
           RoundedRectangle(cornerRadius: 15)
             .fill(.grayBlue)
@@ -47,7 +47,7 @@ struct ChatView: View {
               .padding(.horizontal)
               .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 10)
             .padding(.top, 20)
             .padding(.bottom, 5)
           
@@ -61,7 +61,7 @@ struct ChatView: View {
               }
             }
             .padding(.bottom, 60)
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 10)
             .padding(.top, 20)
           }
         }

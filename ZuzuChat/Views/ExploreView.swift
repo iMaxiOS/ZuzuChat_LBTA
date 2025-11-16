@@ -12,7 +12,6 @@ struct ExploreView: View {
   @EnvironmentObject var session: SessionManager
   
   @State private var vm = ExploreViewModel()
-  @State private var searchText: String = ""
   
   @State private var sections: [CategorySection] = [
     CategorySection(title: "Finance", categories: [
@@ -67,7 +66,6 @@ struct ExploreView: View {
                 .imageScale(.large)
             }
           }
-          .padding(.horizontal, 20)
           
           RoundedRectangle(cornerRadius: 15)
             .fill(.grayBlue)
@@ -77,70 +75,74 @@ struct ExploreView: View {
                 Image(systemName: "magnifyingglass")
                   .renderingMode(.template)
                   .foregroundStyle(.gray)
-                TextField("", text: $searchText, prompt: Text("Search stack or company").foregroundStyle(.gray))
-                  .padding(.vertical)
+                TextField("", text: $vm.searchText, prompt: Text("Search news").foregroundStyle(.gray))
+                .padding(.vertical)
+                .onChange(of: vm.searchText) { newValue in
+                  vm.searchArticles(query: newValue)
+                }
               }
               .padding(.horizontal)
               .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.horizontal, 20)
             .padding(.top, 20)
             .padding(.bottom, 5)
           
           ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 16) {
-              ScrollView(.horizontal, showsIndicators: false) {
-                VStack(alignment: .leading) {
-                  ForEach(sections) { section in
-                    HStack(spacing: 16) {
-                      ForEach(section.categories) { category in
-                        CategoryChip(category: category)
+              if vm.searchText.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                  VStack(alignment: .leading) {
+                    ForEach(sections) { section in
+                      HStack(spacing: 16) {
+                        ForEach(section.categories) { category in
+                          CategoryChip(category: category)
+                        }
                       }
+                      .frame(maxWidth: .infinity, alignment: .leading)
+                      .padding(5)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(5)
                   }
-                  .padding(.horizontal, 20)
+                  .padding(.top)
                 }
-                .padding(.top)
-              }
-              
-              HStack {
-                Text("Top Movers")
-                  .font(.headline.bold().monospaced())
-                Spacer()
-                Button {} label: {
-                  Image(systemName: "arrow.right")
-                    .foregroundStyle(Color(.pink))
-                    .padding()
-                }
-              }
-              .padding(.leading, 20)
-              .padding(.top, 10)
-              
-              ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 14) {
-                  ForEach(moversList) { item in
-                    MoversTopRow(item: item)
+                
+                HStack {
+                  Text("Top Movers")
+                    .font(.headline.bold().monospaced())
+                  Spacer()
+                  Button {} label: {
+                    Image(systemName: "arrow.right")
+                      .foregroundStyle(Color(.pink))
+                      .padding()
                   }
                 }
-                .padding(.horizontal, 20)
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                  HStack(spacing: 14) {
+                    ForEach(moversList) { item in
+                      MoversTopRow(item: item)
+                    }
+                  }
+                }
               }
               
               ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
                   ForEach(vm.articles, id: \.articleId) { news in
                     MoversRow(news: news)
+                      .onTapGesture {
+                        session.navigate(to: .explore(new: news))
+                      }
                   }
                 }
-                .padding(20)
+                .padding(.vertical, 10)
               }
             }
-            .padding(.bottom, 40)
+            .padding(.bottom, 50)
           }
         }
       }
       .padding(.top)
+      .frame(width: UIScreen.main.bounds.width - 20)
     }
     .foregroundStyle(.white)
     .buttonStyle(.plain)
@@ -179,7 +181,7 @@ struct MoversRow: View {
   
   var body: some View {
     ZStack {
-      KFImage(URL(string: news.imageUrl!)!)
+      KFImage(URL(string: news.imageUrl ?? "") ?? URL(string: ""))
         .resizable()
         .cacheMemoryOnly()
         .scaledToFill()

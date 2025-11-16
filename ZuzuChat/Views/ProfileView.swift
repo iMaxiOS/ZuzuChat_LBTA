@@ -101,7 +101,7 @@ private extension ProfileView {
           .padding(.bottom, 50)
         }
       }
-      .padding(.horizontal, 20)
+      .padding(.horizontal, 10)
     }
     .padding(.top)
   }

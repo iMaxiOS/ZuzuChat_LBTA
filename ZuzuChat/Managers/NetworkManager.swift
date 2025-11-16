@@ -65,4 +65,33 @@ final class NetworkManager {
     let result = try decoder.decode(MessageAPIResponse.self, from: data)
     return result.results
   }
+  
+  func searchNews(query: String) async throws -> [NewsResponse] {
+    guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+      throw URLError(.badURL)
+    }
+    
+    var components = URLComponents(string: baseURL)!
+    components.queryItems = [
+      URLQueryItem(name: "apikey", value: apiKey),
+      URLQueryItem(name: "q", value: query)
+    ]
+    
+    guard let url = components.url else {
+      throw URLError(.badURL)
+    }
+    
+    let (data, response) = try await URLSession.shared.data(from: url)
+    
+    guard let httpResponse = response as? HTTPURLResponse,
+          (200..<300).contains(httpResponse.statusCode) else {
+      throw URLError(.badServerResponse)
+    }
+    
+    let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
+    
+    let result = try decoder.decode(NewsAPIResponse.self, from: data)
+    return result.results
+  }
 }
