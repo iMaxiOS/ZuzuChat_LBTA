@@ -71,6 +71,7 @@ struct SignInView: View {
             isCheckCredentials = !isValid
             
             if isValid {
+              session.getCurrentUserSession()
               session.user.email = vm.email
               session.user.password = vm.password
               session.navigate(to: session.isAuthorized ? .main : .chooseInterest)
