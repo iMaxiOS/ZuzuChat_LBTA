@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChooseInterestView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   @Environment(AppRouterManager.self) private var router
   
   @State private var selectedTags: Set<String> = []
@@ -22,9 +22,9 @@ struct ChooseInterestView: View {
           .font(.footnote.bold().monospaced())
           .padding(.horizontal, 10)
         
-        TagCloudView(session: session, selectedTags: $selectedTags)
+        TagCloudView(selectedTags: $selectedTags)
           .padding(.horizontal, 10)
-//          .environment(session)
+          .environment(session)
         
         Spacer()
         
@@ -61,12 +61,13 @@ struct ChooseInterestView: View {
 }
 
 #Preview {
-  ChooseInterestView(session: .init())
+  ChooseInterestView()
     .environment(SessionManager())
+    .environment(AppRouterManager())
 }
 
 struct TagCloudView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   
   @Binding var selectedTags: Set<String>
   

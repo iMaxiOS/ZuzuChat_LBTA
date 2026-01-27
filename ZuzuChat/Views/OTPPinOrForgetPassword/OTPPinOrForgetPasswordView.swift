@@ -13,7 +13,7 @@ enum PushType {
 }
 
 struct OTPPinOrForgetPasswordView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   @Environment(AppRouterManager.self) private var router
   
   @State private var focusedIndex: Int? = nil
@@ -181,9 +181,7 @@ private extension OTPPinOrForgetPasswordView {
 }
 
 #Preview {
-  NavigationStack {
-    OTPPinOrForgetPasswordView(session: .init())
-      .environment(SessionManager())
-      .navigationBarTitleDisplayMode(.inline)
-  }
+  OTPPinOrForgetPasswordView()
+    .environment(SessionManager())
+    .environment(AppRouterManager())
 }

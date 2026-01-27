@@ -35,33 +35,47 @@ struct AppRouterModifier: ViewModifier {
         .navigationDestination(for: AppRouterType.self) { destination in
           switch destination {
           case .onboarding:
-            OnboardingView(session: session)
+            OnboardingView()
+              .environment(session)
           case .login:
-            LoginView(session: session)
+            LoginView()
+              .environment(session)
           case .tabbar:
-            TabbarView(session: session)
+            TabbarView()
+              .environment(session)
           case .signUp:
-            SignUpView(session: session)
+            SignUpView()
+              .environment(session)
           case .signIn:
-            SignInView(session: session)
+            SignInView()
+              .environment(session)
           case .chooseInterest:
-            ChooseInterestView(session: session)
+            ChooseInterestView()
+              .environment(session)
           case .aboutYourSelf:
-            AboutYourSelfView(session: session)
+            AboutYourSelfView()
+              .environment(session)
           case .birthday:
-            BirthdayView(session: session)
+            BirthdayView()
+              .environment(session)
           case .fillProfile:
-            FillProfileView(session: session)
+            FillProfileView()
+              .environment(session)
           case .pinOrForget(let type):
-            OTPPinOrForgetPasswordView(session: session, pushType: type)
+            OTPPinOrForgetPasswordView(pushType: type)
+              .environment(session)
           case .forgotPassword:
-            ForgetPasswordView(session: session)
+            ForgetPasswordView()
+              .environment(session)
           case .report:
             ReportView()
+              .environment(session)
           case .message(let article):
             MessageDetailView(article: article)
+              .environment(session)
           case .explore(let new):
             ExploreDetailView(new: new)
+              .environment(session)
           }
         }
     }
@@ -73,67 +87,3 @@ extension View {
         modifier(AppRouterModifier())
     }
 }
-
-//@MainActor
-//extension View {
-//  func withAppRouter(session: SessionManager) -> some View {
-//    navigationDestination(for: AppRouteManager.self) { destination in
-//      switch destination {
-//      case .onboarding:
-//        OnboardingView(session: session)
-//      case .login:
-//        LoginView(session: session)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .main:
-//        TabbarView(session: session)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .signUp:
-//        SignUpView(session: session)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .signIn:
-//        SignInView(session: session)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .chooseInterest:
-//        ChooseInterestView(session: session)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .aboutYourSelf:
-//        AboutYourSelfView(session: session)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .birthday:
-//        BirthdayView(session: session)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .fillProfile:
-//        FillProfileView(session: session)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .pinOrForget(let type):
-//        OTPPinOrForgetPasswordView(session: session, pushType: type)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .forgotPassword:
-//        ForgetPasswordView(session: session)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .report:
-//        ReportView()
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .message(let article):
-//        MessageView(article: article)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      case .explore(let new):
-//        ExploreDetailView(new: new)
-////          .toolbarVisibility(.hidden, for: .navigationBar)
-////          .environment(session)
-//      }
-//    }
-//  }
-//}

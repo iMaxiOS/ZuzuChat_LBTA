@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BirthdayView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   @Environment(AppRouterManager.self) private var router
   
   @State private var selectedMonth = 1
@@ -145,9 +145,7 @@ struct CustomDatePicker: View {
 }
 
 #Preview {
-  NavigationStack {
-    BirthdayView(session: .init())
-      .environment(SessionManager())
-      .navigationBarTitleDisplayMode(.inline)
-  }
+  BirthdayView()
+    .environment(SessionManager())
+    .environment(AppRouterManager())
 }

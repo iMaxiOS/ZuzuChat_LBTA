@@ -8,12 +8,8 @@
 import SwiftUI
 
 struct SignInView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   @Environment(AppRouterManager.self) private var router
-  
-  init(session: SessionManager) {
-    self._session = Bindable(session)
-  }
   
   @State private var vm = SignInViewModel()
   @State private var isCheckCredentials: Bool = false
@@ -89,7 +85,7 @@ struct SignInView: View {
           .disabled(vm.email.isEmpty || vm.password.isEmpty)
           
           Button {
-//            session.navigate(to: .forgotPassword)
+            router.push(AppRouterType.forgotPassword)
           } label: {
             HStack {
               Text("Forgot the password?")
@@ -185,7 +181,8 @@ struct SignInView: View {
 }
 
 #Preview {
-  SignInView(session: .init())
+  SignInView()
     .environment(SessionManager())
+    .environment(AppRouterManager())
 }
 

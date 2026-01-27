@@ -9,8 +9,8 @@ import SwiftUI
 import PhotosUI
 
 struct FillProfileView: View {
-  @Bindable var session: SessionManager
   @Environment(AppRouterManager.self) private var router
+  @Environment(SessionManager.self) private var session
   
   @State var vm = FillProfileViewModel()
   
@@ -139,6 +139,7 @@ struct FillProfileView: View {
 }
 
 #Preview {
-  FillProfileView(session: .init())
+  FillProfileView()
     .environment(SessionManager())
+    .environment(AppRouterManager())
 }

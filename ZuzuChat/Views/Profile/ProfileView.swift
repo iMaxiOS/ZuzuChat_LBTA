@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   @Environment(AppRouterManager.self) private var router
   
   var body: some View {
@@ -140,6 +140,7 @@ struct ProfileRow: View {
 
 
 #Preview {
-  ProfileView(session: .init())
+  ProfileView()
     .environment(SessionManager())
+    .environment(AppRouterManager())
 }

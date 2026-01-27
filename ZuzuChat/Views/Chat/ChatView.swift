@@ -9,8 +9,8 @@ import SwiftUI
 import Kingfisher
 
 struct ChatView: View {
-  @Bindable var session: SessionManager
-  @Environment(AppRouterManager.self) var router
+  @Environment(SessionManager.self) private var session
+  @Environment(AppRouterManager.self) private var router
   
   @State private var searchText: String = ""
   @State private var isShowNewContent: Bool = false
@@ -20,36 +20,36 @@ struct ChatView: View {
     ZStack {
       Color.bg.ignoresSafeArea()
       
-      VStack(alignment: .leading) {
-        VStack(alignment: .leading, spacing: 0) {
-          RoundedRectangle(cornerRadius: 15)
-            .fill(.grayBlue)
-            .frame(height: 60)
-            .overlay {
-              HStack {
-                Image(systemName: "magnifyingglass")
-                  .renderingMode(.template)
-                  .foregroundStyle(.gray)
-                TextField(
-                  "",
-                  text: $searchText,
-                  prompt: Text("Search chat, people and more ...").foregroundStyle(.gray)
-                )
+      ScrollView(showsIndicators: false) {
+        VStack(alignment: .leading) {
+          VStack(alignment: .leading, spacing: 0) {
+            RoundedRectangle(cornerRadius: 15)
+              .fill(.grayBlue)
+              .frame(height: 60)
+              .overlay {
+                HStack {
+                  Image(systemName: "magnifyingglass")
+                    .renderingMode(.template)
+                    .foregroundStyle(.gray)
+                  TextField(
+                    "",
+                    text: $searchText,
+                    prompt: Text("Search chat, people and more ...").foregroundStyle(.gray)
+                  )
                   .padding(.vertical)
+                }
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .leading)
               }
-              .padding(.horizontal)
-              .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.horizontal, 10)
-            .padding(.top, 20)
-            .padding(.bottom, 5)
-          
-          ScrollView(showsIndicators: false) {
+              .padding(.horizontal, 10)
+              .padding(.top, 20)
+              .padding(.bottom, 5)
+            
             VStack(alignment: .leading, spacing: 16) {
               ForEach(vm.articles, id: \.articleId) { article in
                 ChatCell(article: article)
                   .onTapGesture {
-//                    router.push(AppRouterType.message(article: article))
+                    router.push(AppRouterType.message(article: article))
                   }
               }
             }
@@ -143,6 +143,7 @@ private extension ChatCell {
 }
 
 #Preview {
-  ChatView(session: .init())
+  ChatView()
     .environment(AppRouterManager())
+    .environment(SessionManager())
 }

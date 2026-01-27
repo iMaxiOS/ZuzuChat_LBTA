@@ -19,7 +19,6 @@ struct OnboardingModel: Hashable {
 }
 
 struct OnboardingView: View {
-  @Bindable var session: SessionManager
   @Environment(AppRouterManager.self) private var router
   
   @State private var onboardingData: [OnboardingModel] = OnboardingModel.onboardingData
@@ -106,6 +105,6 @@ private extension OnboardingView {
 }
 
 #Preview {
-  OnboardingView(session: .init())
-    .environment(SessionManager())
+  OnboardingView()
+    .environment(AppRouterManager())
 }

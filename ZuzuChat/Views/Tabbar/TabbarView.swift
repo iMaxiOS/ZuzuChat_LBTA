@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TabbarView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   
   @State private var selectedTab: TabbarType = .home
   
@@ -16,7 +16,7 @@ struct TabbarView: View {
     ZStack {
       TabView(selection: $selectedTab) {
         NavigationStack {
-          HomeView(session: session)
+          HomeView()
             .withAppRouter()
         }
         .tabItem {
@@ -24,7 +24,7 @@ struct TabbarView: View {
         }
         
         NavigationStack() {
-          ExploreView(session: session)
+          ExploreView()
             .navigationTitle(TabbarType.explore.name)
             .withAppRouter()
         }
@@ -42,7 +42,7 @@ struct TabbarView: View {
         }
         
         NavigationStack() {
-          ChatView(session: session)
+          ChatView()
             .navigationTitle(TabbarType.chat.name)
             .withAppRouter()
         }
@@ -51,7 +51,7 @@ struct TabbarView: View {
         }
         
         NavigationStack() {
-          ProfileView(session: session)
+          ProfileView()
             .navigationTitle(TabbarType.profile.name)
             .withAppRouter()
         }
@@ -64,6 +64,6 @@ struct TabbarView: View {
 }
 
 #Preview {
-  TabbarView(session: .init())
+  TabbarView()
     .environment(SessionManager())
 }

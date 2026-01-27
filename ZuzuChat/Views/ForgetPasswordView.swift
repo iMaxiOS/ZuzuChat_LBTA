@@ -12,7 +12,7 @@ enum ForgetPasswordType {
 }
 
 struct ForgetPasswordView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   @Environment(AppRouterManager.self) private var router
   
   @State private var selectedType: ForgetPasswordType = .none
@@ -118,9 +118,7 @@ struct ForgetPasswordView: View {
 }
 
 #Preview {
-  NavigationStack {
-    ForgetPasswordView(session: .init())
-      .environment(SessionManager())
-      .navigationBarTitleDisplayMode(.inline)
-  }
+  ForgetPasswordView()
+    .environment(SessionManager())
+    .environment(AppRouterManager())
 }

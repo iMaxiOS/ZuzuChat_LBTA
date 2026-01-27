@@ -9,16 +9,17 @@ import SwiftUI
 
 @main
 struct ZuzuChatApp: App {
-  @State private var session: SessionManager = SessionManager()
+  @State private var session = SessionManager()
   
   var body: some Scene {
     WindowGroup {
       Group {
         if session.isAuthorized {
-          TabbarView(session: session)
+          TabbarView()
+            .environment(session)
         } else {
-          OnboardingView(session: session)
-          //              .environment(session)
+          OnboardingView()
+//            .environment(session)
         }
       }
     }

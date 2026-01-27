@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct ExploreView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   @Environment(AppRouterManager.self) private var router
   
   @State private var vm = ExploreViewModel()
@@ -203,6 +203,7 @@ struct MoversRow: View {
     }
     .clipShape(.rect(cornerRadius: 30))
     .shadow(color: .white.opacity(0.2), radius: 5)
+    .padding(.horizontal)
   }
 }
 
@@ -232,6 +233,7 @@ struct CategoryChip: View {
 }
 
 #Preview {
-  ExploreView(session: .init())
+  ExploreView()
+    .environment(AppRouterManager())
     .environment(SessionManager())
 }

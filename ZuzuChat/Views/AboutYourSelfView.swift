@@ -12,7 +12,7 @@ enum AboutYourSelfState: String {
 }
 
 struct AboutYourSelfView: View {
-  @Bindable var session: SessionManager
+  @Environment(SessionManager.self) private var session
   @Environment(AppRouterManager.self) private var router
   
   @State private var aboutMe: AboutYourSelfState = .none
@@ -107,6 +107,7 @@ struct AboutYourSelfView: View {
 }
 
 #Preview {
-  AboutYourSelfView(session: .init())
+  AboutYourSelfView()
     .environment(SessionManager())
+    .environment(AppRouterManager())
 }

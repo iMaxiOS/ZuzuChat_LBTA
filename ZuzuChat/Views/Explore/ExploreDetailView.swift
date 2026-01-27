@@ -16,23 +16,21 @@ struct ExploreDetailView: View {
       Color.bg.ignoresSafeArea()
       
       VStack(alignment: .leading, spacing: 15) {
-        VStack {
-          KFImage(URL(string: new.imageUrl ?? "") ?? URL(string: ""))
-            .resizable()
-            .cacheMemoryOnly()
-            .scaledToFill()
-            .frame(height: 250)
-            .clipShape(.rect(cornerRadius: 30))
-          
-          VStack(alignment: .leading, spacing: 15) {
-            Text(new.title)
-              .font(.title2.bold().monospaced())
-            Text(new.description ?? "")
-              .font(.headline)
-              .foregroundStyle(.gray)
-          }
-          .padding(.horizontal, 15)
+        KFImage(URL(string: new.imageUrl ?? "") ?? URL(string: ""))
+          .resizable()
+          .cacheMemoryOnly()
+          .scaledToFill()
+          .frame(width: Screen.width, height: Screen.height / 3)
+          .clipShape(.rect(cornerRadius: 30))
+        
+        VStack(alignment: .leading, spacing: 15) {
+          Text(new.title)
+            .font(.title3.bold())
+          Text(new.description ?? "")
+            .font(.headline)
+            .foregroundStyle(.gray)
         }
+        .padding(.horizontal, 15)
         
         Spacer()
       }
