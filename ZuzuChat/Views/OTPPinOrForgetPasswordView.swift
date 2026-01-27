@@ -13,7 +13,7 @@ enum PushType {
 }
 
 struct OTPPinOrForgetPasswordView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
   @State private var focusedIndex: Int? = nil
   @State private var otp: [String] = Array(repeating: "", count: 4)
@@ -187,5 +187,6 @@ private extension OTPPinOrForgetPasswordView {
 }
 
 #Preview {
-  OTPPinOrForgetPasswordView()
+  OTPPinOrForgetPasswordView(session: .init())
+    .environment(SessionManager())
 }

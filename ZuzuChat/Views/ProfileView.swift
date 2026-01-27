@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-  @EnvironmentObject private var session: SessionManager
+  @Bindable var session: SessionManager
   
   var body: some View {
     ZStack {
@@ -154,6 +154,6 @@ struct ProfileRow: View {
 
 
 #Preview {
-  ProfileView()
-    .environmentObject(SessionManager())
+  ProfileView(session: .init())
+    .environment(SessionManager())
 }

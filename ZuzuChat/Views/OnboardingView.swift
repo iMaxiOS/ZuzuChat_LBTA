@@ -19,7 +19,7 @@ struct OnboardingModel: Hashable {
 }
 
 struct OnboardingView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
   @State private var onboardingData: [OnboardingModel] = OnboardingModel.onboardingData
   @State private var currentIndex = 0
@@ -105,6 +105,6 @@ private extension OnboardingView {
 }
 
 #Preview {
-  OnboardingView()
-    .environmentObject(SessionManager())
+  OnboardingView(session: .init())
+    .environment(SessionManager())
 }

@@ -12,7 +12,7 @@ enum ForgetPasswordType {
 }
 
 struct ForgetPasswordView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
   @State private var selectedType: ForgetPasswordType = .none
   
@@ -124,5 +124,6 @@ struct ForgetPasswordView: View {
 }
 
 #Preview {
-    ForgetPasswordView()
+  ForgetPasswordView(session: .init())
+    .environment(SessionManager())
 }

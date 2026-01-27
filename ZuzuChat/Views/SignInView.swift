@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct SignInView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
+  
+  init(session: SessionManager) {
+    self._session = Bindable(session)
+  }
   
   @State private var vm = SignInViewModel()
-  
   @State private var isCheckCredentials: Bool = false
   
   private var textType: Bool = true
@@ -183,6 +186,7 @@ struct SignInView: View {
 }
 
 #Preview {
-  SignInView()
-    .environmentObject(SessionManager())
+  SignInView(session: .init())
+    .environment(SessionManager())
 }
+

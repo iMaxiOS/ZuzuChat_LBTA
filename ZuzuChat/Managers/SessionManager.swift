@@ -8,11 +8,11 @@
 import Foundation
 import SwiftUI
 
-@MainActor
-final class SessionManager: ObservableObject {
-  @Published var isAuthorized: Bool = false
-  @Published var navigatePath: [NavigationType] = []
-  @Published var user = UserModel()
+@MainActor @Observable
+final class SessionManager {
+  var isAuthorized: Bool = false
+  var navigatePath: [NavigationType] = []
+  var user = UserModel()
   
   public init() {
     getCurrentUserSession()
@@ -21,7 +21,7 @@ final class SessionManager: ObservableObject {
   func getCurrentUserSession() {
     if FileManager.default.fileExists(atPath: UserManager.shared.userFilePath()) {
       let currentUser = UserManager.shared.loadUser()
-      _user = .init(wrappedValue: currentUser ?? .init())
+      user = currentUser ?? .init()
       isAuthorized = true
       print(isAuthorized)
     } else {

@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct ExploreView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
   @State private var vm = ExploreViewModel()
   
@@ -238,6 +238,6 @@ struct CategoryChip: View {
 }
 
 #Preview {
-  ExploreView()
-    .environmentObject(SessionManager())
+  ExploreView(session: .init())
+    .environment(SessionManager())
 }

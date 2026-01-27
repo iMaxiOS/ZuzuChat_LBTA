@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
   var body: some View {
     ZStack(alignment: .topLeading) {
@@ -135,6 +135,6 @@ struct LoginView: View {
 }
 
 #Preview {
-  LoginView()
-    .environmentObject(SessionManager())
+  LoginView(session: .init())
+    .environment(SessionManager())
 }

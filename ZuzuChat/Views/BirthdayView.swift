@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BirthdayView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
   @State private var selectedMonth = 1
   @State private var selectedDay = 1
@@ -150,6 +150,6 @@ struct CustomDatePicker: View {
 }
 
 #Preview {
-  BirthdayView()
-    .environmentObject(SessionManager())
+  BirthdayView(session: .init())
+    .environment(SessionManager())
 }

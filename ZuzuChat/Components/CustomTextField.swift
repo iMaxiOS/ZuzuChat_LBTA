@@ -56,5 +56,6 @@ struct CustomTextField: View {
 }
 
 #Preview {
-  SignInView()
+  SignInView(session: .init())
+    .environment(SessionManager())
 }

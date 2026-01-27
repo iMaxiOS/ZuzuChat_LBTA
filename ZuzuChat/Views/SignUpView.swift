@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct SignUpView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
+  
+  init(session: SessionManager) {
+    self.session = session
+  }
   
   @State private var email: String = ""
   @State private var password: String = ""
@@ -160,7 +164,7 @@ struct SignUpView: View {
   }
 }
 
-#Preview {
-  SignUpView()
-    .environmentObject(SessionManager())
-}
+//#Preview {
+//  SignUpView(session: SessionManager())
+//    .environment(SessionManager())
+//}

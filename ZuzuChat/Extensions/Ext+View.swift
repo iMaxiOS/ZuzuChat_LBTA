@@ -30,59 +30,59 @@ extension View {
     navigationDestination(for: NavigationType.self) { destination in
       switch destination {
       case .onboarding:
-        OnboardingView()
+        OnboardingView(session: session)
       case .login:
-        LoginView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        LoginView(session: session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .main:
-        MainView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        TabbarView(session: session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .signUp:
-        SignUpView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        SignUpView(session: session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .signIn:
-        SignInView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        SignInView(session: session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .chooseInterest:
-        ChooseInterestView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        ChooseInterestView(session: session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .aboutYourSelf:
-        AboutYourSelfView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        AboutYourSelfView(session: session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .birthday:
-        BirthdayView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        BirthdayView(session: session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .fillProfile:
-        FillProfileView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        FillProfileView(session: session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .pinOrForget(let type):
-        OTPPinOrForgetPasswordView(pushType: type)
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        OTPPinOrForgetPasswordView(session: session, pushType: type)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .forgotPassword:
-        ForgetPasswordView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+        ForgetPasswordView(session: session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .report:
         ReportView()
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .message(let article):
         MessageView(article: article)
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       case .explore(let new):
         ExploreDetailView(new: new)
-          .toolbarVisibility(.hidden, for: .navigationBar)
-          .environmentObject(session)
+//          .toolbarVisibility(.hidden, for: .navigationBar)
+//          .environment(session)
       }
     }
   }

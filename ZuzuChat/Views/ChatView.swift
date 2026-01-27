@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct ChatView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
   @State private var searchText: String = ""
   @State private var isShowNewContent: Bool = false
@@ -151,5 +151,5 @@ private extension ChatCell {
 }
 
 #Preview {
-  ChatView()
+  ChatView(session: .init())
 }

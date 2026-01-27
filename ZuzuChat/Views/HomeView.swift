@@ -10,45 +10,43 @@ import Observation
 
 
 struct HomeView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
   @State private var selectedTab: Int = 0
   
-  @Binding var offsetShare: CGFloat
-  @Binding var offsetComment: CGFloat
+  //  @Binding var offsetShare: CGFloat
+  //  @Binding var offsetComment: CGFloat
   
   var body: some View {
     ZStack {
       Color.bg
+        .ignoresSafeArea()
       
-      SwipableImageView()
+      SwappableImageView()
       
       TopTabBar(selectedTab: $selectedTab)
         .frame(maxHeight: .infinity, alignment: .top)
-        .frame(width: UIScreen.main.bounds.width)
-        .padding(.top, 60)
+//        .padding(.top, 60)
       
       HStack(alignment: .bottom, spacing: 10) {
-        BottomInformationView()
-          .environmentObject(session)
+        BottomInformationView(session: session)
+//          .environment(session)
         Spacer()
-        BottomButtonsView(offsetShare: $offsetShare, offsetComment: $offsetComment)
-          .environmentObject(session)
+        BottomButtonsView(session: session)
+//          .environment(session)
       }
       .frame(maxHeight: .infinity, alignment: .bottom)
       .frame(maxWidth: .infinity, alignment: .leading)
-      .frame(width: UIScreen.main.bounds.width)
-      .padding(.bottom, 100)
+      .padding(.bottom)
     }
-    .ignoresSafeArea()
   }
 }
 
 struct BottomButtonsView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
-  @Binding var offsetShare: CGFloat
-  @Binding var offsetComment: CGFloat
+  //  @Binding var offsetShare: CGFloat
+  //  @Binding var offsetComment: CGFloat
   
   var body: some View {
     VStack(spacing: 25) {
@@ -73,7 +71,7 @@ struct BottomButtonsView: View {
       }
       Button {
         withAnimation(.spring) {
-          offsetComment = 0
+          //          offsetComment = 0
         }
       } label: {
         VStack(spacing: 10) {
@@ -86,7 +84,7 @@ struct BottomButtonsView: View {
       }
       Button {
         withAnimation(.spring) {
-          offsetShare = 0
+          //          offsetShare = 0
         }
       } label: {
         VStack(spacing: 10) {
@@ -105,7 +103,7 @@ struct BottomButtonsView: View {
 }
 
 struct BottomInformationView: View {
-  @EnvironmentObject var session: SessionManager
+  @Bindable var session: SessionManager
   
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
@@ -159,7 +157,7 @@ struct TopTabBar: View {
       Spacer(minLength: 3)
       
       HStack(spacing: 10) {
-        ForEach(tabs.indices, id: \..self) { index in
+        ForEach(tabs.indices, id: \.self) { index in
           Button {
             selectedTab = index
           } label: {
@@ -194,27 +192,28 @@ struct TopTabBar: View {
   }
 }
 
-struct SwipableImageView: View {
+struct SwappableImageView: View {
   let images: [String] = ["thor", "scarlet", "panther"]
   
   var body: some View {
-    TabView {
-      ForEach(images, id: \..self) { imageName in
-        Image(imageName)
-          .resizable()
-          .scaledToFill()
-          .rotationEffect(.degrees(-90))
-          .clipped()
+    ScrollView(.vertical) {
+      LazyVStack(spacing: 0) {
+        ForEach(images, id: \..self) { imageName in
+          Image(imageName)
+            .resizable()
+            .scaledToFill()
+            .containerRelativeFrame(.vertical)
+            .scrollTargetLayout()
+        }
       }
     }
-    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-    .rotationEffect(.degrees(90))
-    .frame(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width)
+    .scrollTargetBehavior(.paging)
+    .ignoresSafeArea()
   }
 }
 
 
 #Preview {
-  HomeView(offsetShare: .constant(0), offsetComment: .constant(0))
-    .environmentObject(SessionManager())
+  HomeView(session: .init())
+    .environment(SessionManager())
 }

@@ -9,18 +9,18 @@ import SwiftUI
 
 @main
 struct ZuzuChatApp: App {
-  @StateObject private var session: SessionManager = SessionManager()
+  @State private var session: SessionManager = SessionManager()
   
   var body: some Scene {
     WindowGroup {
       NavigationStack(path: $session.navigatePath) {
         Group {
           if session.isAuthorized {
-            MainView()
-              .environmentObject(session)
+            TabbarView(session: session)
+//              .environment(session)
           } else {
-            OnboardingView()
-              .environmentObject(session)
+            OnboardingView(session: session)
+//              .environment(session)
           }
         }
         .withAppRouter(session: session)
