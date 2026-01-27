@@ -14,6 +14,7 @@ enum PushType {
 
 struct OTPPinOrForgetPasswordView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   @State private var focusedIndex: Int? = nil
   @State private var otp: [String] = Array(repeating: "", count: 4)
@@ -70,13 +71,14 @@ struct OTPPinOrForgetPasswordView: View {
               DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 withAnimation(.bouncy) {
                   isCongratulation.toggle()
-                  session.navigate(to: .main)
+                  router.push(AppRouterType.tabbar)
                 }
               }
             }
         }
       }
     })
+    .navigationTitle(Text(pushType == .otp ? "Create New PIN" : "Forget Password"))
     .onTapGesture {
       withAnimation {
         showKeypad = false
@@ -118,14 +120,6 @@ struct OTPPinOrForgetPasswordView: View {
 private extension OTPPinOrForgetPasswordView {
   var content: some View {
     VStack(alignment: .leading, spacing: 20) {
-      HStack {
-        BackButton()
-        
-        Text(pushType == .otp ? "Create New PIN" : "Forget Password")
-          .font(.headline.bold().monospaced())
-      }
-      .padding(.top, 72)
-      
       VStack(spacing: 0) {
         Text(pushType == .otp ? "Add a PIN number to make your account more secure." : "Code has been sent to +1 111.....99")
           .font(.footnote.bold().monospaced())
@@ -153,7 +147,7 @@ private extension OTPPinOrForgetPasswordView {
               }
           }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
         .padding(.top, showKeypad ? 50 : 70)
         
         Spacer()
@@ -180,13 +174,16 @@ private extension OTPPinOrForgetPasswordView {
         
       }
       .frame(maxWidth: .infinity, alignment: .center)
-      .padding(.top, 100)
-      .padding(.horizontal, 20)
+      .padding(.top, 150)
+      .padding(.horizontal, 10)
     }
   }
 }
 
 #Preview {
-  OTPPinOrForgetPasswordView(session: .init())
-    .environment(SessionManager())
+  NavigationStack {
+    OTPPinOrForgetPasswordView(session: .init())
+      .environment(SessionManager())
+      .navigationBarTitleDisplayMode(.inline)
+  }
 }

@@ -39,7 +39,7 @@ struct CongratulationView: View {
     }
     .background(Color.bg)
     .clipShape(.rect(cornerRadius: 50))
-    .padding(.horizontal, 20)
+    .padding(.horizontal, 10)
   }
 }
 

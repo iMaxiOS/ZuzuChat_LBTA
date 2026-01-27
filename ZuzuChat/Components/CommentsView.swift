@@ -49,10 +49,9 @@ struct CommentsView: View {
         item(mock)
       }
     }
-    .padding(.horizontal, 20)
+    .padding(.horizontal, 10)
     .padding(.bottom, 40)
     .padding(.top, 10)
-    .frame(width: UIScreen.main.bounds.width)
     .buttonStyle(.plain)
     .foregroundStyle(.white)
     .background(Color.bg)
@@ -120,7 +119,7 @@ private extension CommentsView {
         offsetY = 0
       } else {
         if value.translation.height > 0 {
-          offsetY = UIScreen.main.bounds.height
+//          offsetY = UIScreen.main.bounds.height
         } else {
           return
         }
@@ -132,3 +131,4 @@ private extension CommentsView {
 #Preview {
   CommentsView(offsetY: .constant(70))
 }
+

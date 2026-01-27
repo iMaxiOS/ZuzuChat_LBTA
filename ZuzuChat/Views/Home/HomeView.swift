@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-import Observation
-
 
 struct HomeView: View {
   @Bindable var session: SessionManager
@@ -25,15 +23,11 @@ struct HomeView: View {
       SwappableImageView()
       
       TopTabBar(selectedTab: $selectedTab)
-        .frame(maxHeight: .infinity, alignment: .top)
-//        .padding(.top, 60)
       
       HStack(alignment: .bottom, spacing: 10) {
         BottomInformationView(session: session)
-//          .environment(session)
         Spacer()
         BottomButtonsView(session: session)
-//          .environment(session)
       }
       .frame(maxHeight: .infinity, alignment: .bottom)
       .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,14 +38,12 @@ struct HomeView: View {
 
 struct BottomButtonsView: View {
   @Bindable var session: SessionManager
-  
-  //  @Binding var offsetShare: CGFloat
-  //  @Binding var offsetComment: CGFloat
+  @Environment(AppRouterManager.self) private var router
   
   var body: some View {
     VStack(spacing: 25) {
       Button {
-        session.navigate(to: .report)
+        router.push(AppRouterType.report)
       } label: {
         Image(systemName: "flag.fill")
           .resizable()
@@ -144,17 +136,16 @@ struct TopTabBar: View {
   private let tabs = ["Following", "Friends", "For You"]
   
   var body: some View {
-    HStack(spacing: 16) {
+    HStack(spacing: 0) {
       Button {} label: {
         Image(systemName: "play.tv.fill")
-          .renderingMode(.template)
-          .foregroundStyle(.white)
+          .foregroundStyle(.secondary)
           .imageScale(.large)
           .padding(10)
-        
       }
+      .glassEffect(.clear, in: .capsule)
       
-      Spacer(minLength: 3)
+      Spacer()
       
       HStack(spacing: 10) {
         ForEach(tabs.indices, id: \.self) { index in
@@ -163,7 +154,7 @@ struct TopTabBar: View {
           } label: {
             VStack {
               Text(tabs[index])
-                .font(.system(size: 16, weight: .medium))
+                .font(.system(size: 15, weight: .medium))
                 .foregroundColor(selectedTab == index ? Color(.pink) : .white)
                 .overlay(alignment: .bottom) {
                   Rectangle()
@@ -174,26 +165,30 @@ struct TopTabBar: View {
                 }
             }
           }
+          .padding(.vertical, 10)
+          .padding(.horizontal, 3)
         }
       }
+      .padding(.horizontal, 13)
+      .glassEffect(.clear, in: .capsule)
       
-      Spacer(minLength: 3)
+      Spacer()
       
       Button {} label: {
         Image(systemName: "sparkle.magnifyingglass")
-          .renderingMode(.template)
-          .foregroundStyle(.white)
+          .foregroundStyle(.secondary)
           .imageScale(.large)
           .padding(10)
       }
+      .glassEffect(.clear, in: .capsule)
     }
-    .padding(.horizontal, 10)
-    .buttonStyle(.plain)
+    .padding(.horizontal)
+    .frame(maxHeight: .infinity, alignment: .top)
   }
 }
 
 struct SwappableImageView: View {
-  let images: [String] = ["thor", "scarlet", "panther"]
+  private let images: [String] = ["scarlet", "thor", "panther"]
   
   var body: some View {
     ScrollView(.vertical) {

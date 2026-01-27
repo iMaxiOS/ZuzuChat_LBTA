@@ -16,14 +16,12 @@ struct ExploreDetailView: View {
       Color.bg.ignoresSafeArea()
       
       VStack(alignment: .leading, spacing: 15) {
-        BackButton()
-        
         VStack {
           KFImage(URL(string: new.imageUrl ?? "") ?? URL(string: ""))
             .resizable()
             .cacheMemoryOnly()
             .scaledToFill()
-            .frame(width:  UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.35)
+            .frame(height: 250)
             .clipShape(.rect(cornerRadius: 30))
           
           VStack(alignment: .leading, spacing: 15) {
@@ -40,15 +38,9 @@ struct ExploreDetailView: View {
       }
     }
     .foregroundStyle(.white)
-    .overlay(alignment: .top) {
-      HStack {
-        Text(new.sourceName)
-          .font(.headline.bold().monospaced())
-          .frame(maxWidth: 300, alignment: .center)
-          .lineLimit(1)
-          .padding(.top, 10)
-      }
-    }
+    .navigationTitle(Text(new.sourceName))
+    .navigationBarTitleDisplayMode(.inline)
+    .toolbarVisibility(.hidden, for: .tabBar)
   }
 }
 

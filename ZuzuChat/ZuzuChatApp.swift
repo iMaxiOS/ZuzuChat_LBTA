@@ -13,17 +13,13 @@ struct ZuzuChatApp: App {
   
   var body: some Scene {
     WindowGroup {
-      NavigationStack(path: $session.navigatePath) {
-        Group {
-          if session.isAuthorized {
-            TabbarView(session: session)
-//              .environment(session)
-          } else {
-            OnboardingView(session: session)
-//              .environment(session)
-          }
+      Group {
+        if session.isAuthorized {
+          TabbarView(session: session)
+        } else {
+          OnboardingView(session: session)
+          //              .environment(session)
         }
-        .withAppRouter(session: session)
       }
     }
   }

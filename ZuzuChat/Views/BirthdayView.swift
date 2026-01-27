@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BirthdayView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   @State private var selectedMonth = 1
   @State private var selectedDay = 1
@@ -19,16 +20,9 @@ struct BirthdayView: View {
       Color.bg.ignoresSafeArea()
       
       VStack(alignment: .leading, spacing: 20) {
-        HStack {
-          BackButton()
-          
-          Text("When is your birthday?")
-            .font(.headline.bold().monospaced())
-        }
-        
         Text("Your birthday will not be shown to the public.")
           .font(.footnote.bold().monospaced())
-          .padding(.horizontal, 20)
+          .padding(.horizontal, 10)
         
         VStack {
           Image(systemName: "birthday.cake.fill")
@@ -65,13 +59,13 @@ struct BirthdayView: View {
           )
         }
         .frame(maxWidth: .infinity, alignment: .center)
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
         
         Spacer()
         
         HStack(spacing: 10) {
           Button {
-            session.navigate(to: .fillProfile)
+            router.push(AppRouterType.fillProfile)
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -91,7 +85,7 @@ struct BirthdayView: View {
             ) {
               session.user.birthday = date
             }
-            session.navigate(to: .fillProfile)
+            router.push(AppRouterType.fillProfile)
           } label: {
             Text("Continue")
               .font(.headline.bold().monospaced())
@@ -101,11 +95,12 @@ struct BirthdayView: View {
               .clipShape(.rect(cornerRadius: 50))
           }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
       }
     }
     .foregroundStyle(.white)
     .buttonStyle(.plain)
+    .navigationTitle(Text("When is your birthday?"))
   }
 }
 
@@ -150,6 +145,9 @@ struct CustomDatePicker: View {
 }
 
 #Preview {
-  BirthdayView(session: .init())
-    .environment(SessionManager())
+  NavigationStack {
+    BirthdayView(session: .init())
+      .environment(SessionManager())
+      .navigationBarTitleDisplayMode(.inline)
+  }
 }

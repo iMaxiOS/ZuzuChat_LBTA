@@ -39,12 +39,6 @@ struct ReportView: View {
       Color.bg.ignoresSafeArea()
       
       VStack(alignment: .leading, spacing: 20) {
-        HStack {
-          BackButton()
-          
-          Text("Report")
-            .font(.headline.bold().monospaced())
-        }
         
         ScrollView {
           VStack(alignment: .leading, spacing: 5) {
@@ -77,7 +71,7 @@ struct ReportView: View {
             }
           }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
         .font(.footnote.bold().monospaced())
         
         
@@ -104,11 +98,13 @@ struct ReportView: View {
               .clipShape(.rect(cornerRadius: 50))
           }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
       }
       .foregroundStyle(.white)
       .buttonStyle(.plain)
     }
+    .navigationTitle(Text("Report"))
+    .toolbarVisibility(.hidden, for: .tabBar)
   }
 }
 

@@ -55,8 +55,8 @@ struct FloatingActionButton: View {
         }
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-      .padding(.bottom, 70)
-      .padding(.trailing, 20)
+      .padding(.bottom)
+      .padding(.trailing, 10)
     }
     .buttonStyle(.plain)
   }

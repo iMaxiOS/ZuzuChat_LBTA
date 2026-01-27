@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChooseInterestView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   @State private var selectedTags: Set<String> = []
   
@@ -17,26 +18,19 @@ struct ChooseInterestView: View {
       Color.bg.ignoresSafeArea()
       
       VStack(alignment: .leading, spacing: 20) {
-        HStack {
-          BackButton()
-          
-          Text("Choose Your Interests")
-            .font(.headline.bold().monospaced())
-        }
-        
         Text("Choose your interests and get the best video recommendations.")
           .font(.footnote.bold().monospaced())
-          .padding(.horizontal, 20)
+          .padding(.horizontal, 10)
         
         TagCloudView(session: session, selectedTags: $selectedTags)
-          .padding(.horizontal, 20)
+          .padding(.horizontal, 10)
 //          .environment(session)
         
         Spacer()
         
         HStack(spacing: 10) {
           Button {
-            session.navigate(to: .aboutYourSelf)
+            router.push(AppRouterType.aboutYourSelf)
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -48,7 +42,7 @@ struct ChooseInterestView: View {
           
           Button {
             session.user.interests = selectedTags
-            session.navigate(to: .aboutYourSelf)
+            router.push(AppRouterType.aboutYourSelf)
           } label: {
             Text("Continue")
               .font(.headline.bold().monospaced())
@@ -58,10 +52,11 @@ struct ChooseInterestView: View {
               .clipShape(.rect(cornerRadius: 50))
           }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
       }
     }
     .foregroundStyle(.white)
+    .navigationTitle(Text("Choose Your Interests"))
   }
 }
 

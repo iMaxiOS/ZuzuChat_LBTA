@@ -7,10 +7,10 @@
 
 import SwiftUI
 import PhotosUI
-import Observation
 
-@Observable @MainActor
+@Observable
 final class FillProfileViewModel {
+  
   var image: UIImage? = nil
   var email: String = ""
   var fullname: String = ""

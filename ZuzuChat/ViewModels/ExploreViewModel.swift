@@ -15,13 +15,11 @@ final class ExploreViewModel {
   
   private var searchTask: Task<Void, Never>?
   
-  func fetchArticles() {
-    Task {
-      do {
-        articles = try await NetworkManager.shared.fetchPoliticsNews()
-      } catch {
-        print("Failed to fetch articles:", error)
-      }
+  func fetchArticles() async {
+    do {
+      articles = try await NetworkManager.shared.fetchPoliticsNews()
+    } catch {
+      print("Failed to fetch articles:", error)
     }
   }
   

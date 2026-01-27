@@ -10,6 +10,7 @@ import Kingfisher
 
 struct ChatView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) var router
   
   @State private var searchText: String = ""
   @State private var isShowNewContent: Bool = false
@@ -21,14 +22,6 @@ struct ChatView: View {
       
       VStack(alignment: .leading) {
         VStack(alignment: .leading, spacing: 0) {
-          HStack(alignment: .center) {
-            Text("Chats")
-              .font(.title2.bold().monospaced())
-            
-            Spacer()
-          }
-          .padding(.horizontal, 10)
-          
           RoundedRectangle(cornerRadius: 15)
             .fill(.grayBlue)
             .frame(height: 60)
@@ -56,7 +49,7 @@ struct ChatView: View {
               ForEach(vm.articles, id: \.articleId) { article in
                 ChatCell(article: article)
                   .onTapGesture {
-                    session.navigate(to: .message(article: article))
+//                    router.push(AppRouterType.message(article: article))
                   }
               }
             }
@@ -66,14 +59,13 @@ struct ChatView: View {
           }
         }
       }
-      .padding(.top)
       
       FloatingActionButton()
     }
     .foregroundStyle(.white)
     .buttonStyle(.plain)
-    .onAppear {
-      vm.fetchArticles()
+    .task {
+      await vm.fetchArticles()
     }
   }
 }
@@ -152,4 +144,5 @@ private extension ChatCell {
 
 #Preview {
   ChatView(session: .init())
+    .environment(AppRouterManager())
 }

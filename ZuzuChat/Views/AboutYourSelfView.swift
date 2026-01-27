@@ -13,6 +13,7 @@ enum AboutYourSelfState: String {
 
 struct AboutYourSelfView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   @State private var aboutMe: AboutYourSelfState = .none
   
@@ -21,16 +22,9 @@ struct AboutYourSelfView: View {
       Color.bg.ignoresSafeArea()
       
       VStack(alignment: .leading, spacing: 20) {
-        HStack {
-          BackButton()
-          
-          Text("Tell Us About Yourself")
-            .font(.headline.bold().monospaced())
-        }
-        
         Text("Choose your identity & help us to find accurate content for you.")
           .font(.footnote.bold().monospaced())
-          .padding(.horizontal, 20)
+          .padding(.horizontal, 10)
         
         Spacer()
         
@@ -75,13 +69,13 @@ struct AboutYourSelfView: View {
           
         }
         .frame(maxWidth: .infinity, alignment: .center)
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
         
         Spacer()
         
         HStack(spacing: 10) {
           Button {
-            session.navigate(to: .birthday)
+            router.push(AppRouterType.birthday)
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -93,7 +87,7 @@ struct AboutYourSelfView: View {
           
           Button {
             session.user.about = aboutMe.rawValue
-            session.navigate(to: .birthday)
+            router.push(AppRouterType.birthday)
           } label: {
             Text("Continue")
               .font(.headline.bold().monospaced())
@@ -103,11 +97,12 @@ struct AboutYourSelfView: View {
               .clipShape(.rect(cornerRadius: 50))
           }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
       }
     }
     .foregroundStyle(.white)
     .buttonStyle(.plain)
+    .navigationTitle(Text("Tell Us About Yourself"))
   }
 }
 

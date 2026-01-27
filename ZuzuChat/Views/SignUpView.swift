@@ -27,8 +27,6 @@ struct SignUpView: View {
       Color.bg
         .ignoresSafeArea()
       
-      BackButton()
-      
       VStack(alignment: .leading, spacing: 20) {
         Spacer()
         
@@ -157,14 +155,14 @@ struct SignUpView: View {
         }
         .padding(.top, 120)
       }
-      .padding(.horizontal, 20)
+      .padding(.horizontal, 10)
     }
     .foregroundStyle(.white)
     .buttonStyle(.plain)
   }
 }
 
-//#Preview {
-//  SignUpView(session: SessionManager())
-//    .environment(SessionManager())
-//}
+#Preview {
+  SignUpView(session: .init())
+    .environment(SessionManager())
+}

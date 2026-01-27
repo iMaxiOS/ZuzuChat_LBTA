@@ -10,9 +10,9 @@ import Kingfisher
 
 struct ExploreView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   @State private var vm = ExploreViewModel()
-  
   @State private var sections: [CategorySection] = [
     CategorySection(title: "Finance", categories: [
       CategoryItem(title: "All Stack", icon: "✅", isSelected: true),
@@ -53,20 +53,8 @@ struct ExploreView: View {
     ZStack {
       Color.bg.ignoresSafeArea()
       
-      VStack(alignment: .leading) {
+      ScrollView(showsIndicators: false) {
         VStack(alignment: .leading, spacing: 0) {
-          HStack(alignment: .center) {
-            Text("Explore")
-              .font(.title2.bold().monospaced())
-            
-            Spacer()
-            
-            Button {} label: {
-              Image(systemName: "00.circle.ar")
-                .imageScale(.large)
-            }
-          }
-          
           RoundedRectangle(cornerRadius: 15)
             .fill(.grayBlue)
             .frame(height: 60)
@@ -76,78 +64,84 @@ struct ExploreView: View {
                   .renderingMode(.template)
                   .foregroundStyle(.gray)
                 TextField("", text: $vm.searchText, prompt: Text("Search news").foregroundStyle(.gray))
-                .padding(.vertical)
-                .onChange(of: vm.searchText) { newValue in
-                  vm.searchArticles(query: newValue)
-                }
+                  .padding(.vertical)
+                  .onChange(of: vm.searchText) { oldValue, newValue in
+                    vm.searchArticles(query: newValue)
+                  }
               }
               .padding(.horizontal)
               .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.top, 20)
             .padding(.bottom, 5)
+            .padding(.horizontal)
           
-          ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 16) {
-              if vm.searchText.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                  VStack(alignment: .leading) {
-                    ForEach(sections) { section in
-                      HStack(spacing: 16) {
-                        ForEach(section.categories) { category in
-                          CategoryChip(category: category)
-                        }
+          VStack(alignment: .leading, spacing: 16) {
+            if vm.searchText.isEmpty {
+              ScrollView(.horizontal, showsIndicators: false) {
+                VStack(alignment: .leading) {
+                  ForEach(sections) { section in
+                    HStack(spacing: 16) {
+                      ForEach(section.categories) { category in
+                        CategoryChip(category: category)
                       }
-                      .frame(maxWidth: .infinity, alignment: .leading)
-                      .padding(5)
                     }
-                  }
-                  .padding(.top)
-                }
-                
-                HStack {
-                  Text("Top Movers")
-                    .font(.headline.bold().monospaced())
-                  Spacer()
-                  Button {} label: {
-                    Image(systemName: "arrow.right")
-                      .foregroundStyle(Color(.pink))
-                      .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(5)
                   }
                 }
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                  HStack(spacing: 14) {
-                    ForEach(moversList) { item in
-                      MoversTopRow(item: item)
-                    }
-                  }
-                }
+                .padding(.top)
+                .padding(.horizontal)
               }
               
-              ScrollView(showsIndicators: false) {
-                VStack(spacing: 16) {
-                  ForEach(vm.articles, id: \.articleId) { news in
-                    MoversRow(news: news)
-                      .onTapGesture {
-                        session.navigate(to: .explore(new: news))
-                      }
+              HStack {
+                Text("Top Movers")
+                  .font(.headline.bold().monospaced())
+                Spacer()
+                Button {} label: {
+                  Image(systemName: "arrow.right")
+                    .foregroundStyle(Color(.pink))
+                    .padding()
+                }
+              }
+              .padding(.horizontal)
+              
+              ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 14) {
+                  ForEach(moversList) { item in
+                    MoversTopRow(item: item)
                   }
                 }
-                .padding(.vertical, 10)
+                .padding(.horizontal)
               }
             }
-            .padding(.bottom, 50)
+            
+            ScrollView(showsIndicators: false) {
+              VStack(spacing: 16) {
+                ForEach(vm.articles, id: \.articleId) { news in
+                  MoversRow(news: news)
+                    .onTapGesture {
+                      router.push(AppRouterType.explore(new: news))
+                    }
+                }
+              }
+              .padding(.vertical, 10)
+            }
           }
+          .padding(.bottom, 50)
         }
       }
-      .padding(.top)
-      .frame(width: UIScreen.main.bounds.width - 20)
     }
-    .foregroundStyle(.white)
-    .buttonStyle(.plain)
-    .onAppear {
-      vm.fetchArticles()
+    .toolbar {
+      ToolbarItem(placement: .topBarTrailing) {
+        Button {} label: {
+          Image(systemName: "00.circle.ar")
+            .imageScale(.large)
+        }
+      }
+    }
+    .task {
+      await vm.fetchArticles()
     }
   }
 }
@@ -197,7 +191,7 @@ struct MoversRow: View {
           .lineLimit(3)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-      .padding(.horizontal, 20)
+      .padding(.horizontal, 10)
       .padding(.bottom, 10)
       .background(
         LinearGradient(

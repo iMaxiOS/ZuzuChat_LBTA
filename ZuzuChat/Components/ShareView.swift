@@ -65,7 +65,7 @@ struct ShareView: View {
         }
       }
       .font(.footnote.monospaced())
-      .padding(.horizontal, 20)
+      .padding(.horizontal, 10)
       .buttonStyle(.plain)
       
       RoundedRectangle(cornerRadius: 0.5)
@@ -122,10 +122,10 @@ struct ShareView: View {
       }
       .padding(.horizontal, 10)
     }
-    .padding(.horizontal, 20)
+    .padding(.horizontal, 10)
     .padding(.bottom, 40)
     .padding(.top, 10)
-    .frame(width: UIScreen.main.bounds.width)
+//    .frame(width: UIScreen.main.bounds.width)
     .buttonStyle(.plain)
     .foregroundStyle(.white)
     .background(Color.bg)
@@ -177,7 +177,7 @@ private extension ShareView {
         offsetY = 0
       } else {
         if value.translation.height > 0 {
-          offsetY = UIScreen.main.bounds.height
+//          offsetY = UIScreen.main.bounds.height
         } else {
           return
         }

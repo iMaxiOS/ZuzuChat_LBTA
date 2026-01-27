@@ -14,7 +14,7 @@ enum TabbarType: String, CaseIterable {
     switch self {
     case .home: return "Home"
     case .explore: return "Explore"
-    case .phone: return "Call"
+    case .phone: return "Calls"
     case .chat: return "Chat"
     case .profile: return "Profile"
     }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignInView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   init(session: SessionManager) {
     self._session = Bindable(session)
@@ -23,8 +24,6 @@ struct SignInView: View {
     ZStack(alignment: .topLeading) {
       Color.bg
         .ignoresSafeArea()
-      
-      BackButton()
       
       VStack(alignment: .leading, spacing: 20) {
         Text("Login to your\nAccount")
@@ -77,7 +76,7 @@ struct SignInView: View {
               session.getCurrentUserSession()
               session.user.email = vm.email
               session.user.password = vm.password
-              session.navigate(to: session.isAuthorized ? .main : .chooseInterest)
+              router.push(session.isAuthorized ? AppRouterType.tabbar : .chooseInterest)
             }
           } label: {
             Text("Sign In")
@@ -90,7 +89,7 @@ struct SignInView: View {
           .disabled(vm.email.isEmpty || vm.password.isEmpty)
           
           Button {
-            session.navigate(to: .forgotPassword)
+//            session.navigate(to: .forgotPassword)
           } label: {
             HStack {
               Text("Forgot the password?")
@@ -177,7 +176,7 @@ struct SignInView: View {
         }
         .padding(.top, 60)
       }
-      .padding(.horizontal, 20)
+      .padding(.horizontal, 10)
     }
     .foregroundStyle(.white)
     .buttonStyle(.plain)

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   var body: some View {
     ZStack(alignment: .topLeading) {
@@ -83,7 +84,7 @@ struct LoginView: View {
             }
           }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
         
         HStack(spacing: 15) {
           RoundedRectangle(cornerRadius: 1)
@@ -103,7 +104,7 @@ struct LoginView: View {
         
         VStack(spacing: 5 ) {
           Button {
-            session.navigate(to: .signIn)
+            router.push(AppRouterType.signIn)
           } label: {
             Text("Sign in with password")
               .font(.subheadline.bold().monospaced())
@@ -114,7 +115,7 @@ struct LoginView: View {
           }
           
           Button {
-            session.navigate(to: .signUp)
+            router.push(AppRouterType.signUp)
           } label: {
             HStack {
               Text("Don`t have an account?")
@@ -126,7 +127,7 @@ struct LoginView: View {
             .frame(maxWidth: .infinity)
           }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
       }
       .buttonStyle(.plain)
     }

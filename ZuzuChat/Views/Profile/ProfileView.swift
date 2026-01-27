@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   var body: some View {
     ZStack {
@@ -16,27 +17,21 @@ struct ProfileView: View {
       
       contentView
     }
-    .foregroundStyle(.white)
-    .buttonStyle(.plain)
+    .toolbar {
+      ToolbarItem(placement: .topBarTrailing) {
+        Button {} label: {
+          Image(systemName: "pencil.line")
+            .imageScale(.large)
+        }
+      }
+    }
   }
 }
 
 private extension ProfileView {
   var contentView: some View {
-    VStack(alignment: .leading, spacing: 20) {
+    ScrollView(showsIndicators: false) {
       VStack(alignment: .leading, spacing: 0) {
-        HStack {
-          Text("Profile")
-            .font(.title2.bold().monospaced())
-          
-          Spacer()
-          
-          Button {} label: {
-            Image(systemName: "00.circle.ar")
-              .imageScale(.large)
-          }
-        }
-        
         HStack {
           Image(uiImage: base64ToImage(session.user.avatar ?? "") ?? UIImage())
             .resizable()
@@ -52,14 +47,6 @@ private extension ProfileView {
           }
           
           Spacer()
-          
-          Button {} label: {
-            Image(systemName: "pencil.line")
-              .imageScale(.large)
-              .padding([.vertical, .leading])
-              .foregroundStyle(Color(.pink))
-              .padding([.vertical, .leading])
-          }
         }
         .padding(.top, 30)
         .padding(.bottom)
@@ -68,42 +55,41 @@ private extension ProfileView {
           .frame(height: 1)
           .foregroundStyle(.white.opacity(0.1))
         
-        ScrollView(showsIndicators: false) {
+        VStack(spacing: 0) {
           VStack(spacing: 0) {
-            VStack(spacing: 0) {
-              ProfileRow(icon: "calendar", title: "My Favorite Restaurants") { }
-              ProfileRow(icon: "cup.and.saucer", title: "Special Offers & Promo") { }
-              ProfileRow(icon: "wallet.bifold", title: "Payment Methods") { }
+            ProfileRow(icon: "calendar", title: "My Favorite Restaurants") { }
+            ProfileRow(icon: "cup.and.saucer", title: "Special Offers & Promo") { }
+            ProfileRow(icon: "wallet.bifold", title: "Payment Methods") { }
+          }
+          .padding(.top, 8)
+          
+          RoundedRectangle(cornerRadius: 1)
+            .frame(height: 1)
+            .foregroundStyle(.white.opacity(0.1))
+          
+          VStack(spacing: 0) {
+            ProfileRow(icon: "person", title: "Profile") { }
+            ProfileRow(icon: "location.app", title: "Address") { }
+            ProfileRow(icon: "bell", title: "Notification") { }
+            ProfileRow(icon: "lock.shield", title: "Security") { }
+            ProfileRow(icon: "globe", title: "Language", subtitle: "English(US)") { }
+            ProfileRow(icon: "eye", title: "Dark Mode") { }
+            ProfileRow(icon: "info.triangle", title: "Help Center") { }
+            ProfileRow(icon: "person.2", title: "Invite Friends") { }
+            ProfileRow(icon: "rectangle.portrait.and.arrow.right", title: "Logout") {
+              session.logoutSession()
+              router.popToRoot()
             }
-            .padding(.top, 8)
-            
-            RoundedRectangle(cornerRadius: 1)
-              .frame(height: 1)
-              .foregroundStyle(.white.opacity(0.1))
-            
-            VStack(spacing: 0) {
-              ProfileRow(icon: "person", title: "Profile") { }
-              ProfileRow(icon: "location.app", title: "Address") { }
-              ProfileRow(icon: "bell", title: "Notification") { }
-              ProfileRow(icon: "lock.shield", title: "Security") { }
-              ProfileRow(icon: "globe", title: "Language", subtitle: "English(US)") { }
-              ProfileRow(icon: "eye", title: "Dark Mode") { }
-              ProfileRow(icon: "info.triangle", title: "Help Center") { }
-              ProfileRow(icon: "person.2", title: "Invite Friends") { }
-              ProfileRow(icon: "rectangle.portrait.and.arrow.right", title: "Logout") {
-                session.logoutSession()
-              }
-              ProfileRow(icon: "trash", title: "Delete account") {
-                session.deleteAccountSession()
-              }
+            ProfileRow(icon: "trash", title: "Delete account") {
+              session.deleteAccountSession()
+              router.popToRoot()
             }
           }
-          .padding(.bottom, 50)
         }
+        .padding(.bottom, 50)
       }
-      .padding(.horizontal, 10)
+      .padding(.horizontal)
     }
-    .padding(.top)
   }
 }
 

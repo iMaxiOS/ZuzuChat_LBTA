@@ -11,7 +11,7 @@ import SwiftUI
 @MainActor @Observable
 final class SessionManager {
   var isAuthorized: Bool = false
-  var navigatePath: [NavigationType] = []
+//  var navigatePath: [NavigationType] = []
   var user = UserModel()
   
   public init() {
@@ -30,18 +30,12 @@ final class SessionManager {
     }
   }
   
-  func navigate(to: NavigationType) {
-    navigatePath.append(to)
-  }
-  
   func logoutSession() {
     isAuthorized = false
-    navigatePath.removeAll()
   }
   
   func deleteAccountSession() {
     UserManager.shared.deleteUser()
     isAuthorized = false
-    navigatePath.removeAll()
   }
 }

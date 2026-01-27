@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OnboardingModel: Hashable {
-  let image: String
+  var image: String
   let description: String
   
   static let onboardingData: [OnboardingModel] = [
@@ -20,6 +20,7 @@ struct OnboardingModel: Hashable {
 
 struct OnboardingView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   @State private var onboardingData: [OnboardingModel] = OnboardingModel.onboardingData
   @State private var currentIndex = 0
@@ -57,7 +58,7 @@ private extension OnboardingView {
             Image(item.image)
               .resizable()
               .offset(x: offset)
-              .animation(.easeIn(duration: 0.7), value: currentIndex)
+              .animation(.easeIn(duration: 0.4), value: currentIndex)
             
             Text(item.description)
               .font(.largeTitle.bold().monospaced())
@@ -65,7 +66,7 @@ private extension OnboardingView {
               .foregroundStyle(.white)
               .padding(.horizontal)
               .offset(x: offset)
-              .animation(.easeIn(duration: 0.6), value: currentIndex)
+              .animation(.easeIn(duration: 0.3), value: currentIndex)
             
             Spacer()
             
@@ -74,7 +75,7 @@ private extension OnboardingView {
                 RoundedRectangle(cornerRadius: 4)
                   .frame(width: currentIndex == i ? 30 : 8, height: 8)
                   .foregroundStyle(currentIndex == i ? Color(.pink) : .gray)
-                  .animation(.easeInOut(duration: 0.6), value: currentIndex)
+                  .animation(.easeInOut(duration: 0.3), value: currentIndex)
               }
             }
             
@@ -82,7 +83,7 @@ private extension OnboardingView {
               if currentIndex < onboardingData.count - 1 {
                 currentIndex += 1
               } else {
-                session.navigate(to: .login)
+                router.push(AppRouterType.login)
               }
             } label: {
               Text(currentIndex < onboardingData.count - 1 ? "Next" : "Get started")

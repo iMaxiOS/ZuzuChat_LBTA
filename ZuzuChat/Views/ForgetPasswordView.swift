@@ -13,6 +13,7 @@ enum ForgetPasswordType {
 
 struct ForgetPasswordView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   @State private var selectedType: ForgetPasswordType = .none
   
@@ -21,19 +22,12 @@ struct ForgetPasswordView: View {
       Color.bg.ignoresSafeArea()
       
       VStack(alignment: .leading, spacing: 20) {
-        HStack {
-          BackButton()
-          
-          Text("Forget Password")
-            .font(.headline.bold().monospaced())
-        }
-        
         Image(.illustration1)
           .resizable()
         
         Text("Select which contact details should we use to reset your password")
           .font(.footnote.bold().monospaced())
-          .padding(.horizontal, 20)
+          .padding(.horizontal, 10)
         
         VStack(alignment: .leading, spacing: 16) {
           Button {
@@ -59,7 +53,7 @@ struct ForgetPasswordView: View {
                   
                   Spacer()
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 10)
               }
               .frame(height: 125)
               .overlay {
@@ -91,7 +85,7 @@ struct ForgetPasswordView: View {
                   
                   Spacer()
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 10)
               }
               .frame(height: 125)
               .overlay {
@@ -100,12 +94,11 @@ struct ForgetPasswordView: View {
               }
           }
         }
-        .padding(.horizontal, 20)
         
         Spacer()
         
         Button {
-          session.navigate(to: .pinOrForget(type: .forgetPassword))
+          router.push(AppRouterType.pinOrForget(type: .forgetPassword))
         } label: {
           Text("Continue")
             .font(.headline.bold().monospaced())
@@ -114,16 +107,20 @@ struct ForgetPasswordView: View {
             .background(Color(Color(.pink)))
             .clipShape(.rect(cornerRadius: 50))
         }
-        .padding(.horizontal, 20)
         .disabled(selectedType == .none)
       }
+      .padding(.horizontal, 10)
     }
     .foregroundStyle(.white)
     .buttonStyle(.plain)
+    .navigationTitle(Text("Forget Password"))
   }
 }
 
 #Preview {
-  ForgetPasswordView(session: .init())
-    .environment(SessionManager())
+  NavigationStack {
+    ForgetPasswordView(session: .init())
+      .environment(SessionManager())
+      .navigationBarTitleDisplayMode(.inline)
+  }
 }

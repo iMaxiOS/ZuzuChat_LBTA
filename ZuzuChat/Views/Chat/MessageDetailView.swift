@@ -15,9 +15,10 @@ struct Message: Identifiable {
   let time: String
 }
 
-struct MessageView: View {
+struct MessageDetailView: View {
   var article: NewsResponse
   
+  @State private var newMessage: String = ""
   @State private var messages: [Message] = [
     Message(text: "Hello, good morning", isSent: false, time: "09:11"),
     Message(text: "I am a Customer Service. Is there anything I can help you with? 😊", isSent: false, time: "09:15"),
@@ -26,52 +27,42 @@ struct MessageView: View {
     Message(text: "Of course..", isSent: false, time: "09:31"),
     Message(text: "Can you tell me the problem you are having? So I can help solve it 😊", isSent: false, time: "09:45")
   ]
-  @State private var newMessage: String = ""
   
   var body: some View {
     ZStack {
       Color.bg.ignoresSafeArea()
       
       VStack(alignment: .leading, spacing: 5) {
-        BackButton()
-        
-        VStack {
-          ScrollViewReader { scrollView in
-            ScrollView {
-              VStack(alignment: .leading, spacing: 10) {
-                ForEach(messages) { message in
-                  MessageBubble(message: message)
-                }
+        ScrollViewReader { scrollView in
+          ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+              ForEach(messages) { message in
+                MessageBubble(message: message)
               }
             }
-            .onChange(of: messages.count, { oldValue, newValue in
-              if let lastID = messages.last?.id {
-                withAnimation {
-                  scrollView.scrollTo(lastID, anchor: .bottom)
-                }
+          }
+          .onChange(of: messages.count, { oldValue, newValue in
+            if let lastID = messages.last?.id {
+              withAnimation {
+                scrollView.scrollTo(lastID, anchor: .bottom)
               }
-            })
-          }
-          
-          ChatInputView(newMessage: $newMessage) {
-            sendMessage()
-          }
+            }
+          })
+        }
+        
+        ChatInputView(newMessage: $newMessage) {
+          sendMessage()
         }
       }
       .foregroundStyle(.white)
-      .overlay(alignment: .top) {
-        HStack {
-          Text(article.sourceName)
-            .font(.headline.bold().monospaced())
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.top, 10)
-        }
-      }
+      .navigationTitle(Text(article.sourceName))
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbarVisibility(.hidden, for: .tabBar)
     }
   }
 }
 
-private extension MessageView {
+private extension MessageDetailView {
   func sendMessage() {
     guard !newMessage.isEmpty else { return }
     let message = Message(text: newMessage, isSent: true, time: Date.now.formatted(date: .omitted, time: .shortened))
@@ -132,5 +123,5 @@ struct ChatInputView: View {
 }
 
 #Preview {
-  MessageView(article: NewsResponse.init())
+  MessageDetailView(article: NewsResponse.init())
 }

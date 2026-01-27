@@ -10,6 +10,7 @@ import PhotosUI
 
 struct FillProfileView: View {
   @Bindable var session: SessionManager
+  @Environment(AppRouterManager.self) private var router
   
   @State var vm = FillProfileViewModel()
   
@@ -18,13 +19,6 @@ struct FillProfileView: View {
       Color.bg.ignoresSafeArea()
       
       VStack(alignment: .leading, spacing: 20) {
-        HStack {
-          BackButton()
-          
-          Text("Fill Your Profile")
-            .font(.headline.bold().monospaced())
-        }
-        
         VStack(spacing: 20) {
           PhotosPicker(selection: $vm.selectionImage) {
             if let image = vm.image {
@@ -103,13 +97,13 @@ struct FillProfileView: View {
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .foregroundStyle(.gray.opacity(0.3))
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
         
         Spacer()
         
         HStack(spacing: 10) {
           Button {
-            session.navigate(to: .pinOrForget(type: .otp))
+            router.push(AppRouterType.pinOrForget(type: .otp))
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -123,7 +117,7 @@ struct FillProfileView: View {
             let isValid = vm.checkingCredentials()
             if isValid {
               vm.saveUserToFileManager(session.user, isAuthorized: session.isAuthorized)
-              session.navigate(to: .pinOrForget(type: .otp))
+              router.push(AppRouterType.pinOrForget(type: .otp))
             }
           } label: {
             Text("Continue")
@@ -135,11 +129,12 @@ struct FillProfileView: View {
           }
           .disabled(!vm.checkingCredentials())
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 10)
       }
     }
     .foregroundStyle(.white)
     .buttonStyle(.plain)
+    .navigationTitle(Text("Fill Your Profile"))
   }
 }
 
