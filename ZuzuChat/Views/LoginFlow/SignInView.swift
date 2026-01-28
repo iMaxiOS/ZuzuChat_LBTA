@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SignInView: View {
+  @Environment(OnboardingViewModel.self) var onboardingVM
   @Environment(SessionManager.self) private var session
   
   @State private var vm = SignInViewModel()
@@ -70,18 +71,10 @@ struct SignInView: View {
             
             if isValid {
               Task {
-                if let currentUser = try await session.getCurrentUserSession() {
-                  currentUser.isAuthorized = true
-                  session.onboardingType = .tabbar
-                  
-                  Task {
-                    try await UserManager.shared.saveUser(currentUser)
-                  }
-                } else {
-                  session.user.email = vm.email
-                  session.user.password = vm.password
-                  session.onboardingType = .chooseInterest
-                }
+                await session.login()
+                
+                onboardingVM.setEmail(vm.email)
+//                session.onboardingType = .chooseInterest
               }
             }
           } label: {
@@ -139,5 +132,6 @@ struct SignInView: View {
 #Preview {
   SignInView()
     .environment(SessionManager())
+    .environment(OnboardingViewModel())
 }
 

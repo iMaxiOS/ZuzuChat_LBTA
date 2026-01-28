@@ -84,7 +84,6 @@ private extension OnboardingView {
                 currentIndex += 1
               } else {
                 session.onboardingType = .login
-//                router.push(AppRouterType.login)
               }
             } label: {
               Text(currentIndex < onboardingData.count - 1 ? "Next" : "Get started")
@@ -108,6 +107,5 @@ private extension OnboardingView {
 
 #Preview {
   OnboardingView()
-//    .environment(AppRouterManager())
     .environment(SessionManager())
 }

@@ -33,16 +33,16 @@ private extension ProfileView {
     ScrollView(showsIndicators: false) {
       VStack(alignment: .leading, spacing: 0) {
         HStack {
-          Image(uiImage: base64ToImage(session.user.avatar ?? "") ?? UIImage())
+          Image(uiImage: base64ToImage(session.user?.avatar ?? "") ?? UIImage())
             .resizable()
             .scaledToFill()
             .frame(width: 80, height: 80)
             .clipShape(.circle)
           
           VStack(alignment: .leading, spacing: 15) {
-            Text((session.user.fullName ?? "") + " " + (session.user.nickname ?? ""))
+            Text((session.user?.fullName ?? "") + " " + (session.user?.nickname ?? ""))
               .font(.headline.bold().monospaced())
-            Text(session.user.phone ?? "")
+            Text(session.user?.phone ?? "")
               .font(.footnote.monospaced())
           }
           

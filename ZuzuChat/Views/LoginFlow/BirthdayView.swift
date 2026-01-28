@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BirthdayView: View {
+  @Environment(OnboardingViewModel.self) var onboardingVM
   @Environment(SessionManager.self) private var session
   
   @State private var selectedMonth = 1
@@ -84,7 +85,8 @@ struct BirthdayView: View {
                 day: selectedDay
               )
             ) {
-              session.user.birthday = date
+              onboardingVM.setProfile(birthday: date)
+//              session.user?.birthday = date
             }
             
             session.onboardingType = .fillProfile
@@ -107,4 +109,5 @@ struct BirthdayView: View {
 #Preview {
   BirthdayView()
     .environment(SessionManager())
+    .environment(OnboardingViewModel())
 }

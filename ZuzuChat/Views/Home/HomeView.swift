@@ -118,14 +118,14 @@ struct BottomInformationView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
       HStack {
-        Image(uiImage: base64ToImage(session.user.avatar ??  "") ?? UIImage())
+        Image(uiImage: base64ToImage(session.user?.avatar ??  "") ?? UIImage())
           .resizable()
           .scaledToFill()
           .frame(width: 55, height: 55)
           .clipShape(.circle)
         
         VStack(alignment: .leading, spacing: 10) {
-          Text((session.user.fullName ?? "") + " " + (session.user.nickname ?? ""))
+          Text((session.user?.fullName ?? "") + " " + (session.user?.nickname ?? ""))
             .font(.headline.bold().monospaced())
             .foregroundStyle(.white)
           Text("Actor & Singer")
@@ -139,7 +139,7 @@ struct BottomInformationView: View {
       
       HStack {
         Image(systemName: "music.note")
-        Text("Following Girl by \(session.user.nickname ?? "")")
+        Text("Following Girl by \(session.user?.nickname ?? "")")
           .font(.caption.bold().monospaced())
       }
     }

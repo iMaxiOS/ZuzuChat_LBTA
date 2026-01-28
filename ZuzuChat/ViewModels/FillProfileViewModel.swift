@@ -26,17 +26,17 @@ final class FillProfileViewModel {
     }
   }
   
-  func saveUserToFileManager(_ user: UserModel) async {
-    if let image = image {
-      user.avatar = imageToBase64(image) ?? ""
-    }
-    
-    user.fullName = fullname
-    user.nickname = nickname
-    user.email = email
-    user.phone = phoneNumber
-    user.address = address
-  }
+//  func saveUserToFileManager(_ user: UserModel) async {
+//    if let image = image {
+//      user.avatar = imageToBase64(image) ?? ""
+//    }
+//    
+//    user.fullName = fullname
+//    user.nickname = nickname
+//    user.email = email
+//    user.phone = phoneNumber
+//    user.address = address
+//  }
   
   func getImageFromPhotoPicker(from selection: PhotosPickerItem?) async {
     guard let selection else { return }
@@ -58,7 +58,7 @@ final class FillProfileViewModel {
     return false
   }
   
-  private func imageToBase64(_ image: UIImage) -> String? {
+  func imageToBase64(_ image: UIImage) -> String? {
       guard let imageData = image.jpegData(compressionQuality: 1.0) else { return nil }
       return imageData.base64EncodedString()
   }

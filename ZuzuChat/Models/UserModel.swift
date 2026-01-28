@@ -7,66 +7,16 @@
 
 import Foundation
 
-@Observable
-final class UserModel: Codable, Identifiable {
-  var id: UUID
-  var email: String
-  var password: String
+struct UserModel: Codable, Identifiable {
+  var id: UUID?
+  var email: String?
+  var isAuthorized: Bool = false
+  var fullName: String?
   var avatar: String?
-  var interests: Set<String>
+  var interests: Set<String> = []
   var about: String?
   var birthday: Date?
-  var fullName: String?
   var nickname: String?
   var phone: String?
   var address: String?
-  var OTPPin: String
-  var isAuthorized: Bool
-  
-  
-  init(
-    id: UUID,
-    email: String,
-    password: String,
-    avatar: String?,
-    interests: Set<String>,
-    about: String?,
-    birthday: Date?,
-    fullName: String?,
-    nickname: String?,
-    phone: String?,
-    address: String?,
-    OTPPin: String,
-    isAuthorized: Bool
-  ) {
-    self.id = UUID()
-    self.email = email
-    self.password = password
-    self.avatar = avatar
-    self.interests = interests
-    self.about = about
-    self.birthday = birthday
-    self.fullName = fullName
-    self.nickname = nickname
-    self.phone = phone
-    self.address = address
-    self.OTPPin = OTPPin
-    self.isAuthorized = isAuthorized
-  }
-  
-  init () {
-    self.id = UUID()
-    self.email = ""
-    self.password = ""
-    self.avatar = nil
-    self.interests = []
-    self.about = nil
-    self.birthday = nil
-    self.fullName = nil
-    self.nickname = nil
-    self.phone = nil
-    self.address = nil
-    self.OTPPin = ""
-    self.isAuthorized = false
-  }
 }

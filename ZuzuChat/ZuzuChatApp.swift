@@ -24,42 +24,48 @@ enum OnboardingType: Hashable {
 @main
 struct ZuzuChatApp: App {
   @State private var session = SessionManager()
+  @State private var onboardingVM = OnboardingViewModel()
   
   var body: some Scene {
     WindowGroup {
       Group {
-        if session.user.isAuthorized {
-          TabbarView()
-            .environment(session)
-        } else {
           switch session.onboardingType {
           case .login:
             LoginView()
               .environment(session)
+              .environment(onboardingVM)
           case .signIn:
             SignInView()
               .environment(session)
+              .environment(onboardingVM)
           case .otpCode:
             OTPPinOrForgetPasswordView()
               .environment(session)
+              .environment(onboardingVM)
           case .birthday:
             BirthdayView()
               .environment(session)
+              .environment(onboardingVM)
           case .chooseInterest:
             ChooseInterestView()
               .environment(session)
+              .environment(onboardingVM)
           case .fillProfile:
             FillProfileView()
               .environment(session)
+              .environment(onboardingVM)
           case .forgetPassword:
             ForgetPasswordView()
               .environment(session)
+              .environment(onboardingVM)
           case .aboutYourSelf:
             AboutYourSelfView()
               .environment(session)
+              .environment(onboardingVM)
           case .pinOrForget(type: .otp):
             OTPPinOrForgetPasswordView()
               .environment(session)
+              .environment(onboardingVM)
           case .tabbar:
             TabbarView()
               .environment(session)
@@ -69,8 +75,8 @@ struct ZuzuChatApp: App {
           case .pinOrForget(type: .forgetPassword):
             ForgetPasswordView()
               .environment(session)
+              .environment(onboardingVM)
           }
-        }
       }
     }
   }

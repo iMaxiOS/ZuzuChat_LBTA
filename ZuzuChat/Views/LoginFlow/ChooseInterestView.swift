@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ChooseInterestView: View {
+  @Environment(OnboardingViewModel.self) var onboardingVM
   @Environment(SessionManager.self) private var session
   
   @State private var selectedTags: Set<String> = []
@@ -43,7 +44,8 @@ struct ChooseInterestView: View {
           }
           
           Button {
-            session.user.interests = selectedTags
+            onboardingVM.setInterests(selectedTags)
+//            session.user?.interests = selectedTags
             session.onboardingType = .aboutYourSelf
           } label: {
             Text("Continue")
@@ -64,6 +66,7 @@ struct ChooseInterestView: View {
 #Preview {
   ChooseInterestView()
     .environment(SessionManager())
+    .environment(OnboardingViewModel())
 }
 
 struct TagCloudView: View {

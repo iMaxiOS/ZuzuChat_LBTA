@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct FillProfileView: View {
+  @Environment(OnboardingViewModel.self) var onboardingVM
   @Environment(SessionManager.self) private var session
   
   @State var vm = FillProfileViewModel()
@@ -118,8 +119,14 @@ struct FillProfileView: View {
           Button {
             Task {
               let isValid = vm.checkingCredentials()
+              
               if isValid {
-                await vm.saveUserToFileManager(session.user)
+                if let image = vm.image {
+                  onboardingVM.setContacts(avatar: vm.imageToBase64(image) ?? "", fullname: vm.fullname, nickname: vm.nickname, phone: vm.phoneNumber, address: vm.address)
+                }
+                
+                
+//                await vm.saveUserToFileManager(session.user ?? UserModel())
                 session.onboardingType = .pinOrForget(type: .otp)
               }
             }
@@ -143,4 +150,5 @@ struct FillProfileView: View {
 #Preview {
   FillProfileView()
     .environment(SessionManager())
+    .environment(OnboardingViewModel())
 }

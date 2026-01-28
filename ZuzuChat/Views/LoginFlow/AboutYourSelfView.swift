@@ -12,6 +12,7 @@ enum AboutYourSelfState: String {
 }
 
 struct AboutYourSelfView: View {
+  @Environment(OnboardingViewModel.self) var onboardingVM
   @Environment(SessionManager.self) private var session
   
   @State private var aboutMe: AboutYourSelfState = .none
@@ -88,7 +89,8 @@ struct AboutYourSelfView: View {
           }
           
           Button {
-            session.user.about = aboutMe.rawValue
+            onboardingVM.setAbout(aboutMe.rawValue)
+//            session.user?.about = aboutMe.rawValue
             session.onboardingType = .birthday
           } label: {
             Text("Continue")
@@ -109,4 +111,5 @@ struct AboutYourSelfView: View {
 #Preview {
   AboutYourSelfView()
     .environment(SessionManager())
+    .environment(OnboardingViewModel())
 }

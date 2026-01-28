@@ -13,6 +13,7 @@ enum PushType {
 }
 
 struct OTPPinOrForgetPasswordView: View {
+  @Environment(OnboardingViewModel.self) var onboardingVM
   @Environment(SessionManager.self) private var session
   
   @State private var focusedIndex: Int? = nil
@@ -69,12 +70,19 @@ struct OTPPinOrForgetPasswordView: View {
               DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 withAnimation(.bouncy) {
                   isCongratulation.toggle()
-                  session.onboardingType = .tabbar
-                  session.user.OTPPin = otp.joined(separator: "")
-                  session.user.isAuthorized = true
+//                  onboardingVM.setOTP(otp.joined(separator: ""))
+//                  session.user?.OTPPin = otp.joined(separator: "")
+//                  session.user?.isAuthorized = true
                   
                   Task {
-                    try await UserManager.shared.saveUser(session.user)
+                    do {
+                      let user = try onboardingVM.buildUser()
+//                      try await UserManager.shared.saveUser(user)
+                      await session.authorize(user: user)
+//                      session.onboardingType = .tabbar
+                    } catch {
+                      print(error.localizedDescription)
+                    }
                   }
                 }
               }
@@ -185,4 +193,5 @@ private extension OTPPinOrForgetPasswordView {
 #Preview {
   OTPPinOrForgetPasswordView()
     .environment(SessionManager())
+    .environment(OnboardingViewModel())
 }

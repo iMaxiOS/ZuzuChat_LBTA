@@ -8,21 +8,15 @@
 import SwiftUI
 
 struct LoginView: View {
-//  @Environment(AppRouterManager.self) private var router
+  @Environment(OnboardingViewModel.self) private var onboardingVM
   @Environment(SessionManager.self) private var session
   
   var body: some View {
     ZStack(alignment: .topLeading) {
-      Color.bg
-        .ignoresSafeArea()
-      content
+      Color.bg.ignoresSafeArea()
       
-      if session.onboardingType == .signIn {
-        SignInView()
-          .environment(session)
-      }
+      content
     }
-    .foregroundStyle(.white)
   }
 }
 
@@ -149,5 +143,5 @@ private extension LoginView {
 #Preview {
   LoginView()
     .environment(SessionManager())
-//    .environment(AppRouterManager())
+    .environment(OnboardingViewModel())
 }
