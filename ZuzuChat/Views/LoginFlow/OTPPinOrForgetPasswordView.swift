@@ -14,7 +14,6 @@ enum PushType {
 
 struct OTPPinOrForgetPasswordView: View {
   @Environment(SessionManager.self) private var session
-  @Environment(AppRouterManager.self) private var router
   
   @State private var focusedIndex: Int? = nil
   @State private var otp: [String] = Array(repeating: "", count: 4)
@@ -37,7 +36,6 @@ struct OTPPinOrForgetPasswordView: View {
       
       content
     }
-    .foregroundStyle(.white)
     .overlay(alignment: .bottom) {
       VStack(spacing: 0) {
         ForEach(keypadRows, id: \.self) { row in
@@ -49,7 +47,7 @@ struct OTPPinOrForgetPasswordView: View {
                 Text(item)
                   .padding(16)
                   .frame(maxWidth: .infinity)
-                  .foregroundColor(.white)
+                  .foregroundColor(.secondary)
                   .font(.title2.bold())
               }
               .disabled(item.isEmpty)
@@ -62,7 +60,7 @@ struct OTPPinOrForgetPasswordView: View {
       .cornerRadius(20)
       .offset(y: showKeypad ? 0 : 400)
     }
-    .overlay(content: {
+    .overlay {
       if isCongratulation {
         ZStack {
           Color.black.opacity(0.5)
@@ -71,14 +69,19 @@ struct OTPPinOrForgetPasswordView: View {
               DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 withAnimation(.bouncy) {
                   isCongratulation.toggle()
-                  router.push(AppRouterType.tabbar)
+                  session.onboardingType = .tabbar
+                  session.user.OTPPin = otp.joined(separator: "")
+                  session.user.isAuthorized = true
+                  
+                  Task {
+                    try await UserManager.shared.saveUser(session.user)
+                  }
                 }
               }
             }
         }
       }
-    })
-    .navigationTitle(Text(pushType == .otp ? "Create New PIN" : "Forget Password"))
+    }
     .onTapGesture {
       withAnimation {
         showKeypad = false
@@ -120,7 +123,9 @@ struct OTPPinOrForgetPasswordView: View {
 private extension OTPPinOrForgetPasswordView {
   var content: some View {
     VStack(alignment: .leading, spacing: 20) {
-      VStack(spacing: 0) {
+      VStack(spacing: 20) {
+        Text(pushType == .otp ? "Create New PIN" : "Forget Password")
+          .font(.title3.bold().monospaced())
         Text(pushType == .otp ? "Add a PIN number to make your account more secure." : "Code has been sent to +1 111.....99")
           .font(.footnote.bold().monospaced())
           .multilineTextAlignment(.center)
@@ -132,7 +137,6 @@ private extension OTPPinOrForgetPasswordView {
               .background(focusedIndex == index ? Color(.pink.opacity(0.1)) : Color.grayBlue)
               .cornerRadius(10)
               .multilineTextAlignment(.center)
-              .foregroundColor(.white)
               .font(.title2.bold())
               .disabled(true)
               .overlay(
@@ -153,8 +157,6 @@ private extension OTPPinOrForgetPasswordView {
         Spacer()
         
         Button {
-          session.user.OTPPin = otp.joined(separator: "")
-          
           withAnimation(.bouncy(duration: 0.7)) {
             isCongratulation.toggle()
             showKeypad = false
@@ -165,7 +167,7 @@ private extension OTPPinOrForgetPasswordView {
             .font(.headline.bold().monospaced())
             .padding(.vertical, 16)
             .frame(maxWidth: .infinity)
-            .background(Color(Color(.pink)))
+            .background(Color(.appPink))
             .clipShape(.rect(cornerRadius: 50))
         }
         .padding(.bottom, showKeypad ? 320 : 50)
@@ -183,5 +185,4 @@ private extension OTPPinOrForgetPasswordView {
 #Preview {
   OTPPinOrForgetPasswordView()
     .environment(SessionManager())
-    .environment(AppRouterManager())
 }

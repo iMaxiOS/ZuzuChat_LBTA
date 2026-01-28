@@ -13,7 +13,6 @@ enum AboutYourSelfState: String {
 
 struct AboutYourSelfView: View {
   @Environment(SessionManager.self) private var session
-  @Environment(AppRouterManager.self) private var router
   
   @State private var aboutMe: AboutYourSelfState = .none
   
@@ -21,7 +20,10 @@ struct AboutYourSelfView: View {
     ZStack(alignment: .topLeading) {
       Color.bg.ignoresSafeArea()
       
-      VStack(alignment: .leading, spacing: 20) {
+      VStack(spacing: 20) {
+        Text("Tell Us About Yourself")
+          .font(.title3.bold().monospaced())
+        
         Text("Choose your identity & help us to find accurate content for you.")
           .font(.footnote.bold().monospaced())
           .padding(.horizontal, 10)
@@ -75,7 +77,7 @@ struct AboutYourSelfView: View {
         
         HStack(spacing: 10) {
           Button {
-            router.push(AppRouterType.birthday)
+            session.onboardingType = .birthday
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -87,7 +89,7 @@ struct AboutYourSelfView: View {
           
           Button {
             session.user.about = aboutMe.rawValue
-            router.push(AppRouterType.birthday)
+            session.onboardingType = .birthday
           } label: {
             Text("Continue")
               .font(.headline.bold().monospaced())
@@ -100,14 +102,11 @@ struct AboutYourSelfView: View {
         .padding(.horizontal, 10)
       }
     }
-    .foregroundStyle(.white)
     .buttonStyle(.plain)
-    .navigationTitle(Text("Tell Us About Yourself"))
   }
 }
 
 #Preview {
   AboutYourSelfView()
     .environment(SessionManager())
-    .environment(AppRouterManager())
 }

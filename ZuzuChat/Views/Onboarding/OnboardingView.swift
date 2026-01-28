@@ -19,7 +19,8 @@ struct OnboardingModel: Hashable {
 }
 
 struct OnboardingView: View {
-  @Environment(AppRouterManager.self) private var router
+//  @Environment(AppRouterManager.self) private var router
+  @Environment(SessionManager.self) private var session
   
   @State private var onboardingData: [OnboardingModel] = OnboardingModel.onboardingData
   @State private var currentIndex = 0
@@ -82,7 +83,8 @@ private extension OnboardingView {
               if currentIndex < onboardingData.count - 1 {
                 currentIndex += 1
               } else {
-                router.push(AppRouterType.login)
+                session.onboardingType = .login
+//                router.push(AppRouterType.login)
               }
             } label: {
               Text(currentIndex < onboardingData.count - 1 ? "Next" : "Get started")
@@ -106,5 +108,6 @@ private extension OnboardingView {
 
 #Preview {
   OnboardingView()
-    .environment(AppRouterManager())
+//    .environment(AppRouterManager())
+    .environment(SessionManager())
 }

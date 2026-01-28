@@ -9,10 +9,10 @@ import SwiftUI
 
 struct SignInView: View {
   @Environment(SessionManager.self) private var session
-  @Environment(AppRouterManager.self) private var router
   
   @State private var vm = SignInViewModel()
   @State private var isCheckCredentials: Bool = false
+  @State private var isCheckMark: Bool = false
   
   private var textType: Bool = true
   
@@ -45,10 +45,10 @@ struct SignInView: View {
           
           HStack(spacing: 10) {
             Button {
-              session.isAuthorized.toggle()
+              isCheckMark.toggle()
             } label: {
               HStack {
-                Image(systemName: session.isAuthorized ? "checkmark.square.fill" : "square")
+                Image(systemName: isCheckMark ? "checkmark.square.fill" : "square")
                   .resizable()
                   .renderingMode(.template)
                   .frame(width: 20, height: 20)
@@ -69,10 +69,20 @@ struct SignInView: View {
             isCheckCredentials = !isValid
             
             if isValid {
-              session.getCurrentUserSession()
-              session.user.email = vm.email
-              session.user.password = vm.password
-              router.push(session.isAuthorized ? AppRouterType.tabbar : .chooseInterest)
+              Task {
+                if let currentUser = try await session.getCurrentUserSession() {
+                  currentUser.isAuthorized = true
+                  session.onboardingType = .tabbar
+                  
+                  Task {
+                    try await UserManager.shared.saveUser(currentUser)
+                  }
+                } else {
+                  session.user.email = vm.email
+                  session.user.password = vm.password
+                  session.onboardingType = .chooseInterest
+                }
+              }
             }
           } label: {
             Text("Sign In")
@@ -85,7 +95,7 @@ struct SignInView: View {
           .disabled(vm.email.isEmpty || vm.password.isEmpty)
           
           Button {
-            router.push(AppRouterType.forgotPassword)
+            session.onboardingType = .forgetPassword
           } label: {
             HStack {
               Text("Forgot the password?")
@@ -115,66 +125,12 @@ struct SignInView: View {
           }
           .padding(.vertical, 10)
           
-          HStack(spacing: 20) {
-            Button {
-              
-            } label: {
-              Image(.facebook)
-                .resizable()
-                .renderingMode(.template)
-                .frame(width: 15, height: 15)
-                .padding(.vertical)
-                .padding(.horizontal, 25)
-                .background(.grayBlue)
-                .clipShape(.rect(cornerRadius: 20))
-                .overlay {
-                  RoundedRectangle(cornerRadius: 20)
-                    .stroke(.white.opacity(0.1), lineWidth: 1)
-                }
-            }
-            
-            Button {
-              
-            } label: {
-              Image(.google)
-                .resizable()
-                .renderingMode(.template)
-                .frame(width: 15, height: 15)
-                .padding(.vertical)
-                .padding(.horizontal, 25)
-                .background(.grayBlue)
-                .clipShape(.rect(cornerRadius: 20))
-                .overlay {
-                  RoundedRectangle(cornerRadius: 20)
-                    .stroke(.white.opacity(0.1), lineWidth: 1)
-                }
-            }
-            
-            Button {
-              
-            } label: {
-              Image(systemName: "apple.logo")
-                .resizable()
-                .renderingMode(.template)
-                .frame(width: 15, height: 15)
-                .padding(.vertical)
-                .padding(.horizontal, 25)
-                .background(.grayBlue)
-                .clipShape(.rect(cornerRadius: 20))
-                .overlay {
-                  RoundedRectangle(cornerRadius: 20)
-                    .stroke(.white.opacity(0.1), lineWidth: 1)
-                }
-            }
-          }
-          .foregroundStyle(.white)
-          .padding(.bottom)
+          SocialButtonsView()
         }
         .padding(.top, 60)
       }
       .padding(.horizontal, 10)
     }
-    .foregroundStyle(.white)
     .buttonStyle(.plain)
     .ignoresSafeArea(.keyboard, edges: .bottom)
   }
@@ -183,6 +139,5 @@ struct SignInView: View {
 #Preview {
   SignInView()
     .environment(SessionManager())
-    .environment(AppRouterManager())
 }
 

@@ -41,7 +41,11 @@ struct ReportView: View {
       VStack(alignment: .leading, spacing: 20) {
         
         ScrollView {
-          VStack(alignment: .leading, spacing: 5) {
+          VStack(alignment: .leading, spacing: 15) {
+            Text("Report")
+              .font(.title3.bold().monospaced())
+              .frame(maxWidth: .infinity, alignment: .center)
+            
             Text("Select a reason")
             
             ForEach(ReportReason.allCases, id: \.rawValue) { item in
@@ -100,10 +104,8 @@ struct ReportView: View {
         }
         .padding(.horizontal, 10)
       }
-      .foregroundStyle(.white)
       .buttonStyle(.plain)
     }
-    .navigationTitle(Text("Report"))
     .toolbarVisibility(.hidden, for: .tabBar)
   }
 }

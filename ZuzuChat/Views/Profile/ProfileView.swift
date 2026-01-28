@@ -77,12 +77,14 @@ private extension ProfileView {
             ProfileRow(icon: "info.triangle", title: "Help Center") { }
             ProfileRow(icon: "person.2", title: "Invite Friends") { }
             ProfileRow(icon: "rectangle.portrait.and.arrow.right", title: "Logout") {
-              session.logoutSession()
-              router.popToRoot()
+              Task {
+                await session.logoutSession()
+              }
             }
             ProfileRow(icon: "trash", title: "Delete account") {
-              session.deleteAccountSession()
-              router.popToRoot()
+              Task {
+                await session.deleteAccountSession()
+              }
             }
           }
         }

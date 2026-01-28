@@ -179,7 +179,7 @@ struct MoversRow: View {
         .resizable()
         .cacheMemoryOnly()
         .scaledToFill()
-        .frame(height: 150)
+        .frame(width: Screen.width - 32, height: 150)
         .clipped()
       
       VStack(alignment: .leading, spacing: 5) {

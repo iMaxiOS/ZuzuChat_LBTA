@@ -9,15 +9,17 @@ import SwiftUI
 
 struct ChooseInterestView: View {
   @Environment(SessionManager.self) private var session
-  @Environment(AppRouterManager.self) private var router
   
   @State private var selectedTags: Set<String> = []
   
   var body: some View {
-    ZStack(alignment: .topLeading) {
+    ZStack {
       Color.bg.ignoresSafeArea()
       
-      VStack(alignment: .leading, spacing: 20) {
+      VStack(spacing: 20) {
+        Text("Choose Your Interests?")
+          .font(.title3.bold().monospaced())
+        
         Text("Choose your interests and get the best video recommendations.")
           .font(.footnote.bold().monospaced())
           .padding(.horizontal, 10)
@@ -30,40 +32,38 @@ struct ChooseInterestView: View {
         
         HStack(spacing: 10) {
           Button {
-            router.push(AppRouterType.aboutYourSelf)
+            session.onboardingType = .aboutYourSelf
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
               .padding(.vertical, 16)
               .frame(maxWidth: .infinity)
               .background(.grayBlue)
-              .clipShape(.rect(cornerRadius: 50))
+              .clipShape(.capsule)
           }
           
           Button {
             session.user.interests = selectedTags
-            router.push(AppRouterType.aboutYourSelf)
+            session.onboardingType = .aboutYourSelf
           } label: {
             Text("Continue")
               .font(.headline.bold().monospaced())
               .padding(.vertical, 16)
               .frame(maxWidth: .infinity)
               .background(Color(Color(.pink)))
-              .clipShape(.rect(cornerRadius: 50))
+              .clipShape(.capsule)
           }
         }
+        .foregroundStyle(.secondary)
         .padding(.horizontal, 10)
       }
     }
-    .foregroundStyle(.white)
-    .navigationTitle(Text("Choose Your Interests"))
   }
 }
 
 #Preview {
   ChooseInterestView()
     .environment(SessionManager())
-    .environment(AppRouterManager())
 }
 
 struct TagCloudView: View {
@@ -114,7 +114,6 @@ struct TagView: View {
         RoundedRectangle(cornerRadius: 20)
           .stroke(Color(.pink), lineWidth: 1)
       )
-      .foregroundColor(isSelected ? Color.white : Color(Color(.pink)))
       .clipShape(RoundedRectangle(cornerRadius: 20))
       .onTapGesture {
         action()

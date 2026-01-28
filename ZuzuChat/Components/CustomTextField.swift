@@ -22,7 +22,7 @@ struct CustomTextField: View {
           TextField("Email", text: $text)
             .textContentType(.none)
             .padding(.vertical, 15)
-            
+          
         }
       } else {
         HStack(spacing: 10) {
@@ -30,24 +30,9 @@ struct CustomTextField: View {
             .resizable()
             .frame(width: 15, height: 18)
           
-//          if isSecureTextEntry {
-//            SecureField("Password", text: $text)
-//              .frame(height: 45)
-//          } else {
-            TextField("Password", text: $text)
+          SecureField("Password", text: $text)
             .textContentType(.none)
-              .padding(.vertical, 15)
-//          }
-          
-//          Button {
-//            isSecureTextEntry.toggle()
-//          } label: {
-//            Image(systemName: isSecureTextEntry ? "eye.fill" : "eye.slash.fill")
-//              .resizable()
-//              .frame(width: 18, height: 15)
-//          }
-//          .padding(10)
-//          .buttonStyle(.plain)
+            .padding(.vertical, 15)
         }
       }
     }

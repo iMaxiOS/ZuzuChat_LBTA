@@ -15,49 +15,39 @@ struct TabbarView: View {
   var body: some View {
     ZStack {
       TabView(selection: $selectedTab) {
-        NavigationStack {
-          HomeView()
-            .withAppRouter()
-        }
-        .tabItem {
-          Label(TabbarType.home.name, systemImage: TabbarType.home.image)
-        }
+        HomeView()
+          .withAppRouter()
+          .tabItem {
+            Label(TabbarType.home.name, systemImage: TabbarType.home.image)
+          }
         
-        NavigationStack() {
-          ExploreView()
-            .navigationTitle(TabbarType.explore.name)
-            .withAppRouter()
-        }
-        .tabItem {
-          Label(TabbarType.explore.name, systemImage: TabbarType.explore.image)
-        }
+        ExploreView()
+          .navigationTitle(TabbarType.explore.name)
+          .withAppRouter()
+          .tabItem {
+            Label(TabbarType.explore.name, systemImage: TabbarType.explore.image)
+          }
         
-        NavigationStack() {
-          CallListView()
-            .navigationTitle(TabbarType.phone.name)
-            .withAppRouter()
-        }
-        .tabItem {
-          Label(TabbarType.phone.name, systemImage: TabbarType.phone.image)
-        }
+        CallListView()
+          .navigationTitle(TabbarType.phone.name)
+          .withAppRouter()
+          .tabItem {
+            Label(TabbarType.phone.name, systemImage: TabbarType.phone.image)
+          }
         
-        NavigationStack() {
-          ChatView()
-            .navigationTitle(TabbarType.chat.name)
-            .withAppRouter()
-        }
-        .tabItem {
-          Label(TabbarType.chat.name, systemImage: TabbarType.chat.image)
-        }
+        ChatView()
+          .navigationTitle(TabbarType.chat.name)
+          .withAppRouter()
+          .tabItem {
+            Label(TabbarType.chat.name, systemImage: TabbarType.chat.image)
+          }
         
-        NavigationStack() {
-          ProfileView()
-            .navigationTitle(TabbarType.profile.name)
-            .withAppRouter()
-        }
-        .tabItem {
-          Label(TabbarType.profile.name, systemImage: TabbarType.profile.image)
-        }
+        ProfileView()
+          .navigationTitle(TabbarType.profile.name)
+          .withAppRouter()
+          .tabItem {
+            Label(TabbarType.profile.name, systemImage: TabbarType.profile.image)
+          }
       }
     }
   }

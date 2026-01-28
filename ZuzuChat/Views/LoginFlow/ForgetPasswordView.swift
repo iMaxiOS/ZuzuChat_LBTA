@@ -13,7 +13,6 @@ enum ForgetPasswordType {
 
 struct ForgetPasswordView: View {
   @Environment(SessionManager.self) private var session
-  @Environment(AppRouterManager.self) private var router
   
   @State private var selectedType: ForgetPasswordType = .none
   
@@ -21,7 +20,10 @@ struct ForgetPasswordView: View {
     ZStack(alignment: .topLeading) {
       Color.bg.ignoresSafeArea()
       
-      VStack(alignment: .leading, spacing: 20) {
+      VStack(spacing: 20) {
+        Text("Forget Password")
+          .font(.title3.bold().monospaced())
+        
         Image(.illustration1)
           .resizable()
         
@@ -98,7 +100,7 @@ struct ForgetPasswordView: View {
         Spacer()
         
         Button {
-          router.push(AppRouterType.pinOrForget(type: .forgetPassword))
+          session.onboardingType = .pinOrForget(type: .forgetPassword)
         } label: {
           Text("Continue")
             .font(.headline.bold().monospaced())
@@ -111,14 +113,11 @@ struct ForgetPasswordView: View {
       }
       .padding(.horizontal, 10)
     }
-    .foregroundStyle(.white)
     .buttonStyle(.plain)
-    .navigationTitle(Text("Forget Password"))
   }
 }
 
 #Preview {
   ForgetPasswordView()
     .environment(SessionManager())
-    .environment(AppRouterManager())
 }

@@ -9,7 +9,6 @@ import SwiftUI
 import PhotosUI
 
 struct FillProfileView: View {
-  @Environment(AppRouterManager.self) private var router
   @Environment(SessionManager.self) private var session
   
   @State var vm = FillProfileViewModel()
@@ -18,7 +17,10 @@ struct FillProfileView: View {
     ZStack(alignment: .topLeading) {
       Color.bg.ignoresSafeArea()
       
-      VStack(alignment: .leading, spacing: 20) {
+      VStack(spacing: 20) {
+        Text("Fill Your Profile")
+          .font(.title3.bold().monospaced())
+        
         VStack(spacing: 20) {
           PhotosPicker(selection: $vm.selectionImage) {
             if let image = vm.image {
@@ -44,7 +46,7 @@ struct FillProfileView: View {
             Image(systemName: "square.and.pencil.circle.fill")
               .resizable()
               .renderingMode(.template)
-              .foregroundStyle(Color(.pink))
+              .foregroundStyle(.gray)
               .frame(width: 30, height: 30)
           }
           
@@ -103,7 +105,7 @@ struct FillProfileView: View {
         
         HStack(spacing: 10) {
           Button {
-            router.push(AppRouterType.pinOrForget(type: .otp))
+            session.onboardingType = .pinOrForget(type: .otp)
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -114,10 +116,12 @@ struct FillProfileView: View {
           }
           
           Button {
-            let isValid = vm.checkingCredentials()
-            if isValid {
-              vm.saveUserToFileManager(session.user, isAuthorized: session.isAuthorized)
-              router.push(AppRouterType.pinOrForget(type: .otp))
+            Task {
+              let isValid = vm.checkingCredentials()
+              if isValid {
+                await vm.saveUserToFileManager(session.user)
+                session.onboardingType = .pinOrForget(type: .otp)
+              }
             }
           } label: {
             Text("Continue")
@@ -132,14 +136,11 @@ struct FillProfileView: View {
         .padding(.horizontal, 10)
       }
     }
-    .foregroundStyle(.white)
     .buttonStyle(.plain)
-    .navigationTitle(Text("Fill Your Profile"))
   }
 }
 
 #Preview {
   FillProfileView()
     .environment(SessionManager())
-    .environment(AppRouterManager())
 }

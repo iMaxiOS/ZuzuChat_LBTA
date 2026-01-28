@@ -30,7 +30,7 @@ struct ExploreDetailView: View {
             .font(.headline)
             .foregroundStyle(.gray)
         }
-        .padding(.horizontal, 15)
+        .padding(.horizontal)
         
         Spacer()
       }

@@ -26,7 +26,7 @@ final class FillProfileViewModel {
     }
   }
   
-  func saveUserToFileManager(_ user: UserModel, isAuthorized: Bool) {
+  func saveUserToFileManager(_ user: UserModel) async {
     if let image = image {
       user.avatar = imageToBase64(image) ?? ""
     }
@@ -36,8 +36,6 @@ final class FillProfileViewModel {
     user.email = email
     user.phone = phoneNumber
     user.address = address
-    
-    UserManager.shared.saveUser(user)
   }
   
   func getImageFromPhotoPicker(from selection: PhotosPickerItem?) async {

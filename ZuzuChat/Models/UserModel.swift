@@ -7,7 +7,8 @@
 
 import Foundation
 
-final class UserModel: ObservableObject, Codable, Identifiable {
+@Observable
+final class UserModel: Codable, Identifiable {
   var id: UUID
   var email: String
   var password: String
@@ -20,6 +21,7 @@ final class UserModel: ObservableObject, Codable, Identifiable {
   var phone: String?
   var address: String?
   var OTPPin: String
+  var isAuthorized: Bool
   
   
   init(
@@ -34,7 +36,8 @@ final class UserModel: ObservableObject, Codable, Identifiable {
     nickname: String?,
     phone: String?,
     address: String?,
-    OTPPin: String
+    OTPPin: String,
+    isAuthorized: Bool
   ) {
     self.id = UUID()
     self.email = email
@@ -48,6 +51,7 @@ final class UserModel: ObservableObject, Codable, Identifiable {
     self.phone = phone
     self.address = address
     self.OTPPin = OTPPin
+    self.isAuthorized = isAuthorized
   }
   
   init () {
@@ -63,5 +67,6 @@ final class UserModel: ObservableObject, Codable, Identifiable {
     self.phone = nil
     self.address = nil
     self.OTPPin = ""
+    self.isAuthorized = false
   }
 }

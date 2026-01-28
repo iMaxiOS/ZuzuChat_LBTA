@@ -9,7 +9,6 @@ import SwiftUI
 
 struct BirthdayView: View {
   @Environment(SessionManager.self) private var session
-  @Environment(AppRouterManager.self) private var router
   
   @State private var selectedMonth = 1
   @State private var selectedDay = 1
@@ -19,9 +18,11 @@ struct BirthdayView: View {
     ZStack(alignment: .topLeading) {
       Color.bg.ignoresSafeArea()
       
-      VStack(alignment: .leading, spacing: 20) {
+      VStack(spacing: 20) {
+        Text("When is your birthday?")
+          .font(.title3.bold().monospaced())
         Text("Your birthday will not be shown to the public.")
-          .font(.footnote.bold().monospaced())
+          .font(.footnote.bold())
           .padding(.horizontal, 10)
         
         VStack {
@@ -65,7 +66,7 @@ struct BirthdayView: View {
         
         HStack(spacing: 10) {
           Button {
-            router.push(AppRouterType.fillProfile)
+            session.onboardingType = .fillProfile
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -85,7 +86,8 @@ struct BirthdayView: View {
             ) {
               session.user.birthday = date
             }
-            router.push(AppRouterType.fillProfile)
+            
+            session.onboardingType = .fillProfile
           } label: {
             Text("Continue")
               .font(.headline.bold().monospaced())
@@ -98,54 +100,11 @@ struct BirthdayView: View {
         .padding(.horizontal, 10)
       }
     }
-    .foregroundStyle(.white)
     .buttonStyle(.plain)
-    .navigationTitle(Text("When is your birthday?"))
-  }
-}
-
-struct CustomDatePicker: View {
-  @Binding var selectedMonth: Int
-  @Binding var selectedDay: Int
-  @Binding var selectedYear: Int
-  
-  let months = Array(1...12)
-  let days = Array(1...31)
-  let years = Array(1950...2025)
-  
-  var body: some View {
-    HStack(spacing: 0) {
-      Picker(selection: $selectedDay, label: Text("")) {
-        ForEach(days, id: \.self) { day in
-          Text("\(day)")
-            .font(.system(size: day == selectedDay ? 18 : 16, weight: day == selectedDay ? .bold : .regular))
-            .foregroundColor(day == selectedDay ? .white : .gray)
-        }
-      }
-      
-      Picker(selection: $selectedMonth, label: Text("")) {
-        ForEach(months, id: \.self) { month in
-          Text(Calendar.current.monthSymbols[month - 1])
-            .font(.system(size: month == selectedMonth ? 18 : 16, weight: month == selectedMonth ? .bold : .regular).monospaced())
-            .foregroundColor(month == selectedMonth ? .white : .gray)
-        }
-      }
-      .frame(width: 150)
-      
-      Picker(selection: $selectedYear, label: Text("")) {
-        ForEach(years, id: \.self) { year in
-          Text("\(year)")
-            .font(.system(size: year == selectedYear ? 18 : 16, weight: year == selectedYear ? .bold : .regular))
-            .foregroundColor(year == selectedYear ? .white : .gray)
-        }
-      }
-    }
-    .pickerStyle(.wheel)
   }
 }
 
 #Preview {
   BirthdayView()
     .environment(SessionManager())
-    .environment(AppRouterManager())
 }

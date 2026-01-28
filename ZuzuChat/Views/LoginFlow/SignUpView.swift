@@ -93,66 +93,12 @@ struct SignUpView: View {
           }
           .padding(.vertical, 10)
           
-          HStack(spacing: 20) {
-            Button {
-              
-            } label: {
-              Image(.facebook)
-                .resizable()
-                .renderingMode(.template)
-                .frame(width: 15, height: 15)
-                .padding(.vertical)
-                .padding(.horizontal, 25)
-                .background(.grayBlue)
-                .clipShape(.rect(cornerRadius: 20))
-                .overlay {
-                  RoundedRectangle(cornerRadius: 20)
-                    .stroke(.white.opacity(0.1), lineWidth: 1)
-                }
-            }
-            
-            Button {
-              
-            } label: {
-              Image(.google)
-                .resizable()
-                .renderingMode(.template)
-                .frame(width: 15, height: 15)
-                .padding(.vertical)
-                .padding(.horizontal, 25)
-                .background(.grayBlue)
-                .clipShape(.rect(cornerRadius: 20))
-                .overlay {
-                  RoundedRectangle(cornerRadius: 20)
-                    .stroke(.white.opacity(0.1), lineWidth: 1)
-                }
-            }
-            
-            Button {
-              
-            } label: {
-              Image(systemName: "apple.logo")
-                .resizable()
-                .renderingMode(.template)
-                .frame(width: 15, height: 15)
-                .padding(.vertical)
-                .padding(.horizontal, 25)
-                .background(.grayBlue)
-                .clipShape(.rect(cornerRadius: 20))
-                .overlay {
-                  RoundedRectangle(cornerRadius: 20)
-                    .stroke(.white.opacity(0.1), lineWidth: 1)
-                }
-            }
-          }
-          .foregroundStyle(.white)
-          .padding(.bottom)
+          SocialButtonsView()
         }
         .padding(.top, 120)
       }
       .padding(.horizontal, 10)
     }
-    .foregroundStyle(.white)
     .buttonStyle(.plain)
   }
 }
