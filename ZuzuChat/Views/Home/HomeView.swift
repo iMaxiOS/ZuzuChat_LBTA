@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
   @Environment(SessionManager.self) private var session
+  @Environment(AppRouterManager.self) private var router
   
   @State private var selectedTab: Int = 0
   
@@ -26,6 +27,7 @@ struct HomeView: View {
         
         BottomButtonsView()
           .environment(session)
+          .environment(router)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
       .padding(.bottom)

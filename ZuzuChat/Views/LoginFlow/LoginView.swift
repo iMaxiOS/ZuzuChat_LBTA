@@ -121,7 +121,7 @@ private extension LoginView {
         }
         
         Button {
-          session.push(toType: .signIn)
+//          session.push(toType: .signIn)
         } label: {
           HStack {
             Text("Don`t have an account?")

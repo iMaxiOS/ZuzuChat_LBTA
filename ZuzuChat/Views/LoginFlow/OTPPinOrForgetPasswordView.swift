@@ -70,16 +70,11 @@ struct OTPPinOrForgetPasswordView: View {
               DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 withAnimation(.bouncy) {
                   isCongratulation.toggle()
-//                  onboardingVM.setOTP(otp.joined(separator: ""))
-//                  session.user?.OTPPin = otp.joined(separator: "")
-//                  session.user?.isAuthorized = true
                   
                   Task {
                     do {
                       let user = try onboardingVM.buildUser()
-//                      try await UserManager.shared.saveUser(user)
                       await session.authorize(user: user)
-//                      session.onboardingType = .tabbar
                     } catch {
                       print(error.localizedDescription)
                     }

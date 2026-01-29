@@ -9,17 +9,17 @@ import SwiftUI
 
 struct TabbarView: View {
   @Environment(SessionManager.self) private var session
-  
-  @State private var selectedTab: TabbarType = .home
+  @Environment(AppRouterManager.self) private var router
   
   var body: some View {
     ZStack {
-      TabView(selection: $selectedTab) {
+      TabView(selection: Bindable(router).selectedTab) {
         HomeView()
           .withAppRouter()
           .tabItem {
             Label(TabbarType.home.name, systemImage: TabbarType.home.image)
           }
+          .tag(TabbarType.home)
         
         ExploreView()
           .navigationTitle(TabbarType.explore.name)
@@ -27,6 +27,7 @@ struct TabbarView: View {
           .tabItem {
             Label(TabbarType.explore.name, systemImage: TabbarType.explore.image)
           }
+          .tag(TabbarType.explore)
         
         CallListView()
           .navigationTitle(TabbarType.phone.name)
@@ -34,6 +35,7 @@ struct TabbarView: View {
           .tabItem {
             Label(TabbarType.phone.name, systemImage: TabbarType.phone.image)
           }
+          .tag(TabbarType.phone)
         
         ChatView()
           .navigationTitle(TabbarType.chat.name)
@@ -41,6 +43,7 @@ struct TabbarView: View {
           .tabItem {
             Label(TabbarType.chat.name, systemImage: TabbarType.chat.image)
           }
+          .tag(TabbarType.chat)
         
         ProfileView()
           .navigationTitle(TabbarType.profile.name)
@@ -48,6 +51,7 @@ struct TabbarView: View {
           .tabItem {
             Label(TabbarType.profile.name, systemImage: TabbarType.profile.image)
           }
+          .tag(TabbarType.profile)
       }
     }
   }
@@ -56,4 +60,5 @@ struct TabbarView: View {
 #Preview {
   TabbarView()
     .environment(SessionManager())
+    .environment(AppRouterManager())
 }
