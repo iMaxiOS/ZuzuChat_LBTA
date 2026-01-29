@@ -52,7 +52,6 @@ extension OnboardingViewModel {
     return UserModel(
       id: draft.id,
       email: draft.email,
-      isAuthorized: draft.isAuthorized,
       fullName: draft.fullName,
       avatar: draft.avatar,
       interests: draft.interests,

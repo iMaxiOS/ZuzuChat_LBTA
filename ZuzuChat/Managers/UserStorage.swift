@@ -45,22 +45,18 @@ import Foundation
 //  }
 //}
 
-final class UserManager {
+final class UserStorage {
 
-    static let shared = UserManager()
+    static let shared = UserStorage()
     private init() {}
 
     private let fileName = "user_data.json"
-
-    // MARK: - File URL
 
     private var fileURL: URL {
         FileManager.default
             .urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent(fileName)
     }
-
-    // MARK: - Save
 
     func saveUser(_ user: UserModel) async throws {
         let data = try JSONEncoder().encode(user)
@@ -69,8 +65,6 @@ final class UserManager {
             try data.write(to: self.fileURL, options: .atomic)
         }.value
     }
-
-    // MARK: - Load
 
     func loadUser() async throws -> UserModel? {
         try await Task.detached(priority: .utility) {
@@ -82,9 +76,7 @@ final class UserManager {
             return try JSONDecoder().decode(UserModel.self, from: data)
         }.value
     }
-
-    // MARK: - Delete
-
+  
     func deleteUser() async throws {
         try await Task.detached(priority: .utility) {
             guard FileManager.default.fileExists(atPath: self.fileURL.path) else {

@@ -8,66 +8,14 @@
 import Foundation
 import SwiftUI
 
-//@MainActor @Observable
-//final class SessionManager {
-//  var user = UserModel()
-//  var onboardingType: OnboardingType = .onboarding
-//
-//  public init() {
-//    Task {
-//      do {
-//        _ = try await getCurrentUserSession()
-//      } catch {
-//        print(error.localizedDescription)
-//      }
-//    }
-//  }
-//
-//  func getCurrentUserSession() async throws -> UserModel? {
-//    do {
-//      let path = await UserManager.shared.userFilePath()
-//
-//      if FileManager.default.fileExists(atPath: path) {
-//        if let currentUser = try await UserManager.shared.loadUser() {
-//          user = currentUser
-//          return user
-//        }
-//      }
-//    } catch {
-//      print(error.localizedDescription)
-//    }
-//
-//    return nil
-//  }
-//
-//  func logoutSession() async {
-//    do {
-//      user.isAuthorized = false
-//      onboardingType = .login
-//
-//      try await UserManager.shared.saveUser(user)
-//    } catch {
-//      print(error.localizedDescription)
-//    }
-//  }
-//
-//  func deleteAccountSession() async {
-//    do {
-//      user.isAuthorized = false
-//      onboardingType = .login
-//
-//      try await UserManager.shared.deleteUser()
-//    } catch {
-//      print(error.localizedDescription)
-//    }
-//  }
-//}
-
 @MainActor
 @Observable
 final class SessionManager {
   
+  @ObservationIgnored @AppStorage("isAuthorizedUser") private var storedIsAuthorized: Bool = false
+
   private(set) var user: UserModel?
+
   var onboardingType: OnboardingType = .onboarding
   
   init() {
@@ -79,13 +27,12 @@ final class SessionManager {
   func login() async {
     await loadUser()
     
-    guard var user else { return }
-    
-    user.isAuthorized = true
+    guard let user else { return }
     
     do {
-      try await UserManager.shared.saveUser(user)
+      try await UserStorage.shared.saveUser(user)
       self.user = user
+      storedIsAuthorized = true
       onboardingType = .tabbar
     } catch {
       print("Failed to save user:", error)
@@ -94,16 +41,11 @@ final class SessionManager {
   
   func restoreSession() async {
     do {
-      if let loadUser = try await UserManager.shared.loadUser() {
+      if let loadUser = try await UserStorage.shared.loadUser() {
         self.user = loadUser
-        
-        if loadUser.isAuthorized {
-          onboardingType = .tabbar
-        } else {
-          onboardingType = .login
-        }
+        onboardingType = storedIsAuthorized ? .tabbar : .login
       } else {
-        onboardingType = .login
+        onboardingType = .onboarding
       }
     } catch {
       resetSession()
@@ -113,12 +55,11 @@ final class SessionManager {
   
   func authorize(user newUser: UserModel) async {
     do {
-      var user = newUser
-      user.isAuthorized = true
-      
-      try await UserManager.shared.saveUser(user)
+      let user = newUser
+      try await UserStorage.shared.saveUser(user)
       
       self.user = user
+      storedIsAuthorized = true
       onboardingType = .tabbar
     } catch {
       print("❌ Authorization error:", error.localizedDescription)
@@ -126,47 +67,30 @@ final class SessionManager {
   }
   
   func logoutSession() async {
-    do {
-      if var user {
-        user.isAuthorized = false
-        try await UserManager.shared.saveUser(user)
-      }
-      
-      resetSession()
-    } catch {
-      print("❌ Logout error:", error.localizedDescription)
-    }
+    resetSession()
   }
   
   func deleteAccountSession() async {
     do {
-      try await UserManager.shared.deleteUser()
+      try await UserStorage.shared.deleteUser()
       resetSession()
     } catch {
       print("❌ Delete account error:", error.localizedDescription)
     }
   }
   
-  private func updateOnboardingState() {
-    guard let user else {
-      onboardingType = .onboarding
-      return
-    }
-    
-    onboardingType = user.isAuthorized ? .tabbar : .login
-  }
-  
   private func resetSession() {
+    storedIsAuthorized = false
     user = nil
     onboardingType = .login
   }
   
   private func loadUser() async {
     do {
-      if let savedUser = try await UserManager.shared.loadUser() {
+      if let savedUser = try await UserStorage.shared.loadUser() {
         self.user = savedUser
       } else {
-        onboardingType = .login
+        onboardingType = .chooseInterest
       }
     } catch {
       print("Failed to load user:", error)

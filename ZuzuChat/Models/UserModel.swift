@@ -10,7 +10,6 @@ import Foundation
 struct UserModel: Codable, Identifiable {
   var id: UUID?
   var email: String?
-  var isAuthorized: Bool = false
   var fullName: String?
   var avatar: String?
   var interests: Set<String> = []
