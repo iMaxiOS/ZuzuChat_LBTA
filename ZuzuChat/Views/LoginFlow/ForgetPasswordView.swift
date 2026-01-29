@@ -100,7 +100,7 @@ struct ForgetPasswordView: View {
         Spacer()
         
         Button {
-          session.onboardingType = .pinOrForget(type: .forgetPassword)
+          session.push(toType: .pinOrForget(type: .forgetPassword))
         } label: {
           Text("Continue")
             .font(.headline.bold().monospaced())

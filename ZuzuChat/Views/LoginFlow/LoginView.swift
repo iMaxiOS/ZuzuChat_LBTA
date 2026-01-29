@@ -110,7 +110,7 @@ private extension LoginView {
       
       VStack(spacing: 5 ) {
         Button {
-          session.onboardingType = .signIn
+          session.push(toType: .signIn)
         } label: {
           Text("Sign in with password")
             .font(.subheadline.bold().monospaced())
@@ -121,7 +121,7 @@ private extension LoginView {
         }
         
         Button {
-          session.onboardingType = .signIn
+          session.push(toType: .signIn)
         } label: {
           HStack {
             Text("Don`t have an account?")

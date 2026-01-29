@@ -67,7 +67,7 @@ struct BirthdayView: View {
         
         HStack(spacing: 10) {
           Button {
-            session.onboardingType = .fillProfile
+            session.push(toType: .fillProfile)
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -83,13 +83,12 @@ struct BirthdayView: View {
                 year: selectedYear,
                 month: selectedMonth,
                 day: selectedDay
-              )
-            ) {
+              ))
+            {
               onboardingVM.setProfile(birthday: date)
-//              session.user?.birthday = date
             }
             
-            session.onboardingType = .fillProfile
+            session.push(toType: .fillProfile)
           } label: {
             Text("Continue")
               .font(.headline.bold().monospaced())

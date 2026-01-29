@@ -15,8 +15,7 @@ final class SessionManager {
   @ObservationIgnored @AppStorage("isAuthorizedUser") private var storedIsAuthorized: Bool = false
 
   private(set) var user: UserModel?
-
-  var onboardingType: OnboardingType = .onboarding
+  private(set) var onboardingType: OnboardingType = .onboarding
   
   init() {
     Task {
@@ -76,6 +75,26 @@ final class SessionManager {
       resetSession()
     } catch {
       print("❌ Delete account error:", error.localizedDescription)
+    }
+  }
+  
+  func push(toType: OnboardingType) {
+    switch onboardingType {
+    case .onboarding: onboardingType = toType
+    case .login: onboardingType = toType
+    case .forgetPassword: onboardingType = toType
+    case .otpCode: onboardingType = toType
+    case .tabbar: onboardingType = toType
+    case .signIn: onboardingType = toType
+    case .pinOrForget(let type):
+      switch type {
+      case .forgetPassword: onboardingType = toType
+      case .otp: onboardingType = toType
+      }
+    case .chooseInterest: onboardingType = toType
+    case .aboutYourSelf: onboardingType = toType
+    case .fillProfile: onboardingType = toType
+    case .birthday: onboardingType = toType
     }
   }
   

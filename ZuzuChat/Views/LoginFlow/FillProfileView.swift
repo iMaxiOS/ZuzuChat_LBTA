@@ -106,7 +106,7 @@ struct FillProfileView: View {
         
         HStack(spacing: 10) {
           Button {
-            session.onboardingType = .pinOrForget(type: .otp)
+            session.push(toType: .pinOrForget(type: .otp))
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -122,12 +122,16 @@ struct FillProfileView: View {
               
               if isValid {
                 if let image = vm.image {
-                  onboardingVM.setContacts(avatar: vm.imageToBase64(image) ?? "", fullname: vm.fullname, nickname: vm.nickname, phone: vm.phoneNumber, address: vm.address)
+                  onboardingVM.setContacts(
+                    avatar: vm.imageToBase64(image) ?? "",
+                    fullname: vm.fullname,
+                    nickname: vm.nickname,
+                    phone: vm.phoneNumber,
+                    address: vm.address
+                  )
                 }
                 
-                
-//                await vm.saveUserToFileManager(session.user ?? UserModel())
-                session.onboardingType = .pinOrForget(type: .otp)
+                session.push(toType: .pinOrForget(type: .otp))
               }
             }
           } label: {

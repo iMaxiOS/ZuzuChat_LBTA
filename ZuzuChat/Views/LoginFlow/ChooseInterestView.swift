@@ -33,7 +33,7 @@ struct ChooseInterestView: View {
         
         HStack(spacing: 10) {
           Button {
-            session.onboardingType = .aboutYourSelf
+            session.push(toType: .aboutYourSelf)
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -45,8 +45,7 @@ struct ChooseInterestView: View {
           
           Button {
             onboardingVM.setInterests(selectedTags)
-//            session.user?.interests = selectedTags
-            session.onboardingType = .aboutYourSelf
+            session.push(toType: .aboutYourSelf)
           } label: {
             Text("Continue")
               .font(.headline.bold().monospaced())

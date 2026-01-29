@@ -74,7 +74,6 @@ struct SignInView: View {
                 await session.login()
                 
                 onboardingVM.setEmail(vm.email)
-//                session.onboardingType = .chooseInterest
               }
             }
           } label: {
@@ -88,7 +87,7 @@ struct SignInView: View {
           .disabled(vm.email.isEmpty || vm.password.isEmpty)
           
           Button {
-            session.onboardingType = .forgetPassword
+            session.push(toType: .forgetPassword)
           } label: {
             HStack {
               Text("Forgot the password?")

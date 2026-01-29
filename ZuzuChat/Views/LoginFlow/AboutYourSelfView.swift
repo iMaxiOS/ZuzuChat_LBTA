@@ -78,7 +78,7 @@ struct AboutYourSelfView: View {
         
         HStack(spacing: 10) {
           Button {
-            session.onboardingType = .birthday
+            session.push(toType: .birthday)
           } label: {
             Text("Skip")
               .font(.headline.bold().monospaced())
@@ -90,8 +90,7 @@ struct AboutYourSelfView: View {
           
           Button {
             onboardingVM.setAbout(aboutMe.rawValue)
-//            session.user?.about = aboutMe.rawValue
-            session.onboardingType = .birthday
+            session.push(toType: .birthday)
           } label: {
             Text("Continue")
               .font(.headline.bold().monospaced())

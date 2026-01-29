@@ -83,7 +83,7 @@ private extension OnboardingView {
               if currentIndex < onboardingData.count - 1 {
                 currentIndex += 1
               } else {
-                session.onboardingType = .login
+                session.push(toType: .login)
               }
             } label: {
               Text(currentIndex < onboardingData.count - 1 ? "Next" : "Get started")
