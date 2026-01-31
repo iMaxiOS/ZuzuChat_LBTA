@@ -42,7 +42,6 @@ struct MessageDetailView: View {
         TextField("", text: $newMessage, prompt: Text("Messages...").foregroundStyle(.gray))
           .padding(10)
           .lineLimit(1...4)
-          .submitLabel(.return)
       }
       
       ToolbarSpacer(.fixed, placement: .bottomBar)

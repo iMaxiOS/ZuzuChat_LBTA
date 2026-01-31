@@ -23,13 +23,13 @@ final class ExploreViewModel {
     }
   }
   
-  func searchArticles(query: String) {
+  func searchArticles() {
     searchTask?.cancel()
     searchTask = Task {
       try? await Task.sleep(nanoseconds: 500_000_000)
 
       do {
-        articles = try await NetworkManager.shared.searchNews(query: query)
+        articles = try await NetworkManager.shared.searchNews(query: searchText)
       } catch {
         print("Failed to fetch articles:", error)
       }

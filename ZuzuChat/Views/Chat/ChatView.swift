@@ -23,27 +23,22 @@ struct ChatView: View {
       ScrollView(showsIndicators: false) {
         VStack(alignment: .leading) {
           VStack(alignment: .leading, spacing: 0) {
-            RoundedRectangle(cornerRadius: 15)
-              .fill(.grayBlue)
-              .frame(height: 60)
-              .overlay {
-                HStack {
-                  Image(systemName: "magnifyingglass")
-                    .renderingMode(.template)
-                    .foregroundStyle(.gray)
-                  TextField(
-                    "",
-                    text: $searchText,
-                    prompt: Text("Search chat, people and more ...").foregroundStyle(.white)
-                  )
-                  .padding(.vertical)
-                }
-                .padding(.horizontal)
-                .frame(maxWidth: .infinity, alignment: .leading)
-              }
-              .padding(.horizontal, 10)
-              .padding(.top, 20)
-              .padding(.bottom, 5)
+            HStack {
+              Image(systemName: "magnifyingglass")
+                .renderingMode(.template)
+                .foregroundStyle(.gray)
+              
+              TextField(
+                "",
+                text: $searchText,
+                prompt: Text("Search chat, people and more ...")
+              )
+              .padding(.vertical)
+            }
+            .padding(.horizontal)
+            .glassEffect(.clear, in: .rect(cornerRadius: 20))
+            .padding(.bottom, 5)
+            .padding(.horizontal, 10)
             
             VStack(alignment: .leading, spacing: 16) {
               ForEach(vm.articles, id: \.articleId) { article in
