@@ -49,10 +49,10 @@ struct FloatingActionButton: View {
             .foregroundColor(.white)
             .rotationEffect(.degrees(isExpanded ? 45 : 0))
             .frame(width: 75, height: 75)
-            .background(Color(.pink))
             .clipShape(Circle())
             .shadow(radius: 4)
         }
+        .glassEffect(.clear, in: .circle)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
       .padding(.bottom)

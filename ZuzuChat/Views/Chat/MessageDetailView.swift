@@ -32,93 +32,59 @@ struct MessageDetailView: View {
     ZStack {
       Color.bg.ignoresSafeArea()
       
-      VStack(alignment: .leading, spacing: 5) {
-        ScrollViewReader { scrollView in
-          ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
-              ForEach(messages) { message in
-                MessageBubble(message: message)
-              }
-            }
-          }
-          .onChange(of: messages.count, { oldValue, newValue in
-            if let lastID = messages.last?.id {
-              withAnimation {
-                scrollView.scrollTo(lastID, anchor: .bottom)
-              }
-            }
-          })
-        }
-        
-        ChatInputView(newMessage: $newMessage) {
-          sendMessage()
-        }
+      content
+    }
+    .navigationTitle(Text(article.sourceName))
+    .navigationBarTitleDisplayMode(.inline)
+    .toolbarVisibility(.hidden, for: .tabBar)
+    .toolbar {
+      ToolbarItem(placement: .bottomBar) {
+        TextField("", text: $newMessage, prompt: Text("Messages...").foregroundStyle(.gray))
+          .padding(10)
+          .lineLimit(1...4)
+          .submitLabel(.return)
       }
-      .foregroundStyle(.white)
-      .navigationTitle(Text(article.sourceName))
-      .navigationBarTitleDisplayMode(.inline)
-      .toolbarVisibility(.hidden, for: .tabBar)
+      
+      ToolbarSpacer(.fixed, placement: .bottomBar)
+      
+      ToolbarItem(placement: .bottomBar) {
+        Button { sendMessage() } label: {
+          Image(systemName: "paperplane.fill")
+        }
+        .padding(2)
+        .disabled(newMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+      }
     }
   }
 }
 
 private extension MessageDetailView {
+  var content: some View {
+    VStack {
+      ScrollViewReader { scrollView in
+        ScrollView {
+          VStack(alignment: .leading, spacing: 10) {
+            ForEach(messages) { message in
+              MessageBubble(message: message)
+            }
+          }
+        }
+        .onChange(of: messages.count, { oldValue, newValue in
+          if let lastID = messages.last?.id {
+            withAnimation {
+              scrollView.scrollTo(lastID, anchor: .bottom)
+            }
+          }
+        })
+      }
+    }
+  }
+  
   func sendMessage() {
     guard !newMessage.isEmpty else { return }
     let message = Message(text: newMessage, isSent: true, time: Date.now.formatted(date: .omitted, time: .shortened))
     messages.append(message)
     newMessage = ""
-  }
-}
-
-struct MessageBubble: View {
-  let message: Message
-  
-  var body: some View {
-    HStack {
-      if message.isSent { Spacer() }
-      
-      VStack(alignment: message.isSent ? .trailing : .leading, spacing: 4) {
-        Text(message.text)
-          .padding()
-          .background(message.isSent ? Color(.pink).opacity(0.3) : Color.gray.opacity(0.2))
-          .foregroundColor(.white)
-          .cornerRadius(20)
-        
-        Text(message.time)
-          .font(.caption)
-          .foregroundColor(.gray)
-          .padding(message.isSent ? .trailing : .leading, 10)
-          .frame(maxWidth: .infinity, alignment: message.isSent ? .trailing : .leading)
-      }
-      .frame(maxWidth: 300, alignment: message.isSent ? .trailing : .leading)
-    }
-    .padding(.horizontal)
-  }
-}
-
-struct ChatInputView: View {
-  @Binding var newMessage: String
-  var onSend: () -> Void
-  
-  var body: some View {
-    HStack {
-      TextField("", text: $newMessage, prompt: Text("Messages...").foregroundStyle(.gray))
-        .padding()
-        .background(Color.gray.opacity(0.2))
-        .cornerRadius(20)
-        .foregroundColor(.white)
-      
-      Button { onSend() } label: {
-        Image(systemName: "paperplane.fill")
-          .foregroundColor(.white)
-          .padding()
-          .background(Color(.pink))
-          .clipShape(Circle())
-      }
-      .disabled(newMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-    }
-    .padding([.horizontal, .bottom])
   }
 }
 
