@@ -49,10 +49,9 @@ struct FloatingActionButton: View {
             .foregroundColor(.white)
             .rotationEffect(.degrees(isExpanded ? 45 : 0))
             .frame(width: 75, height: 75)
-            .clipShape(Circle())
-            .shadow(radius: 4)
+            .background(.white.opacity(0.00001))
+            .glassEffect(.clear, in: .circle)
         }
-        .glassEffect(.clear, in: .circle)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
       .padding(.bottom)
@@ -77,14 +76,12 @@ struct FABVerticalItem: View {
           .foregroundColor(.green)
         
         Text(text)
-          .foregroundColor(.grayBlue)
           .font(.headline.bold().monospaced())
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       .frame(width: 160)
       .padding(20)
-      .background(Color.white)
-      .clipShape(Capsule())
+      .glassEffect(.clear, in: .capsule)
       .shadow(radius: 2)
       .offset(y: offset)
       .opacity(offset == 0 ? 0 : 1)

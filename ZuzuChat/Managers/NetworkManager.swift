@@ -15,7 +15,7 @@ final class NetworkManager {
   private let baseURL = "https://newsdata.io/api/1/latest"
   private let apiKey = "pub_b4968addff094216b123fb0986f07cbc"
   
-  func fetchPoliticsNews(for country: String = "us", for category: String = "politics") async throws -> [NewsResponse] {
+  func fetchPoliticsNews(for country: String = "us", to category: String = "politics") async throws -> [NewsResponse] {
     var components = URLComponents(string: baseURL)!
     components.queryItems = [
       URLQueryItem(name: "apikey", value: apiKey),

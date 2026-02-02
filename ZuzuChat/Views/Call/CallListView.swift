@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CallListView: View {
   @State private var isShowCallView: Bool = false
+  @State private var selectedIndex: Int = 0
   
   var body: some View {
     ZStack {
@@ -19,7 +20,7 @@ struct CallListView: View {
           ForEach(0..<20) { index in
             VStack(spacing: 5) {
               HStack(spacing: 16) {
-                Image(index % 2 == 0 ? .thor: .girl)
+                Image(index % 2 == 0 ? .thor : .girl)
                   .resizable()
                   .scaledToFill()
                   .frame(width: 50, height: 50)
@@ -34,10 +35,11 @@ struct CallListView: View {
                 
                 Spacer()
                 
-                Button{
+                Button {
+                  selectedIndex = index
                   isShowCallView.toggle()
                 } label : {
-                  Image(systemName: index % 2 == 0 ? "phone.fill" : "video.fill")
+                  Image(systemName: "phone.fill")
                     .padding()
                     .foregroundStyle(.blue)
                     .background(.gray.opacity(0.1))
@@ -55,9 +57,9 @@ struct CallListView: View {
         }
         .padding(.horizontal, 10)
       }
-      .sheet(isPresented: $isShowCallView) {
-        CallView()
-      }
+    }
+    .sheet(isPresented: $isShowCallView) {
+      CallView(index: selectedIndex)
     }
   }
 }
@@ -65,3 +67,4 @@ struct CallListView: View {
 #Preview {
   CallListView()
 }
+

@@ -16,48 +16,32 @@ struct CommentItem: Identifiable {
   let ago: String
   
   static let comments: [CommentItem] = [
-    .init(photo: "thor", name: "Kristian Thor", comment: "Here's a SwiftUI implementation of the screen you provided, targeting iOS 17. This layout includes", like: "544", ago: "5 days ago"),
-    .init(photo: "panther", name: "Maxim Mashilhin", comment: "Here's a SwiftUI implementation of the screen you provided, targeting iOS 17. This layout includes", like: "322", ago: "2 days ago"),
-    .init(photo: "scarlet", name: "David Karlson", comment: "Here's a SwiftUI implementation of the screen you provided, targeting iOS 17. This layout includes", like: "544", ago: "1 days ago")
+    .init(photo: "thor", name: "Kristian Thor", comment: "Screen you provided, targeting iOS 17. This layout includes", like: "544", ago: "5 days ago"),
+    .init(photo: "panther", name: "Maxim Mashilhin", comment: "Here's a, targeting iOS 17. This layout includes", like: "322", ago: "2 days ago"),
+    .init(photo: "scarlet", name: "David Karlson", comment: "Here's a SwiftUI implementation of the screen you", like: "544", ago: "1 days ago")
   ]
 }
 
 struct CommentsView: View {
-  @Binding var offsetY: CGFloat
-  
   private let commentsMock = CommentItem.comments
   
   @State private var addCommentText: String = ""
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 25) {
-      VStack(spacing: 20) {
-        RoundedRectangle(cornerRadius: 2)
-          .fill(Color.gray.opacity(0.4))
-          .frame(width: 40, height: 4)
-        
-        Text("22K Comments")
-          .font(.title2.bold().monospaced())
-      }
-      .frame(maxWidth: .infinity, alignment: .center)
-      
-      RoundedRectangle(cornerRadius: 0.5)
-        .fill(.gray.opacity(0.4))
-        .frame(height: 1)
+    VStack(spacing: 20) {
+      Text("\(CommentItem.comments.count) Comments")
+        .font(.title2.bold().monospaced())
       
       ForEach(commentsMock) { mock in
         item(mock)
       }
+      Spacer()
     }
     .padding(.horizontal, 10)
-    .padding(.bottom, 40)
-    .padding(.top, 10)
-    .buttonStyle(.plain)
-    .foregroundStyle(.white)
-    .background(Color.bg)
+    .padding([.top, .bottom], 25)
     .clipShape(.rect(topLeadingRadius: 30, topTrailingRadius: 30))
-    .offset(y: offsetY)
-    .gesture(DragGesture().onChanged(onChanged).onEnded(onEnded))
+    .presentationDetents([.medium, .large])
+    .presentationBackground(.bg)
   }
 }
 
@@ -74,15 +58,8 @@ private extension CommentsView {
         
         Text(item.name)
           .font(.headline.bold().monospaced())
-          .foregroundStyle(.white)
         
         Spacer()
-        
-        Button {} label: {
-          Image(systemName: "circle.grid.3x3.circle")
-            .padding(.vertical)
-        }
-        .buttonStyle(.plain)
       }
       
       Text(item.comment)
@@ -100,35 +77,10 @@ private extension CommentsView {
           .padding(.horizontal)
       }
     }
-    .foregroundStyle(.gray)
-  }
-  
-  func onChanged(value: DragGesture.Value) {
-    withAnimation(.spring) {
-      if value.translation.height > 0 {
-        offsetY = value.translation.height
-      } else {
-        return
-      }
-    }
-  }
-  
-  func onEnded(value: DragGesture.Value) {
-    withAnimation(.spring) {
-      if offsetY < 100 {
-        offsetY = 0
-      } else {
-        if value.translation.height > 0 {
-//          offsetY = UIScreen.main.bounds.height
-        } else {
-          return
-        }
-      }
-    }
   }
 }
 
 #Preview {
-  CommentsView(offsetY: .constant(70))
+  CommentsView()
 }
 

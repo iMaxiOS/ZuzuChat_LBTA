@@ -11,7 +11,9 @@ struct HomeView: View {
   @Environment(SessionManager.self) private var session
   @Environment(AppRouterManager.self) private var router
   
-  @State private var selectedTab: Int = 0
+  @State private var vm = HomeViewModel()
+  @State private var isShowShare: Bool = false
+  @State private var isShowComments: Bool = false
   
   var body: some View {
     ZStack {
@@ -25,12 +27,22 @@ struct HomeView: View {
         
         Spacer()
         
-        BottomButtonsView()
+        BottomButtonsView(
+          isLike: $vm.isLike,
+          isShowComments: $isShowComments,
+          isShowShare: $isShowShare
+        )
           .environment(session)
           .environment(router)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
       .padding(.bottom)
+    }
+    .sheet(isPresented: $isShowComments) {
+      CommentsView()
+    }
+    .sheet(isPresented: $isShowShare) {
+      ShareView()
     }
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
@@ -42,7 +54,7 @@ struct HomeView: View {
       }
       
       ToolbarItem(placement: .title) {
-        TopTabBar(selectedTab: $selectedTab)
+        TopTabBar(selectedTab: $vm.selectedTab)
       }
       
       ToolbarItem(placement: .topBarLeading) {
@@ -53,100 +65,6 @@ struct HomeView: View {
         }
       }
     } 
-  }
-}
-
-struct BottomButtonsView: View {
-  @Environment(SessionManager.self) private var session
-  @Environment(AppRouterManager.self) private var router
-  
-  var body: some View {
-    VStack(spacing: 25) {
-      Button {
-        router.push(AppRouterType.report)
-      } label: {
-        Image(systemName: "flag.fill")
-          .resizable()
-          .frame(width: 25, height: 25)
-      }
-      .padding()
-      
-      Button {} label: {
-        VStack(spacing: 10) {
-          Image(systemName: "heart.fill")
-            .resizable()
-            .frame(width: 30, height: 25)
-            .foregroundStyle(Color(.pink))
-          Text("225.9K")
-            .font(.footnote)
-        }
-      }
-      Button {
-        withAnimation(.spring) {
-          //          offsetComment = 0
-        }
-      } label: {
-        VStack(spacing: 10) {
-          Image(systemName: "message.fill")
-            .resizable()
-            .frame(width: 30, height: 25)
-          Text("22K")
-            .font(.footnote)
-        }
-      }
-      Button {
-        withAnimation(.spring) {
-          //          offsetShare = 0
-        }
-      } label: {
-        VStack(spacing: 10) {
-          Image(systemName: "paperplane.fill")
-            .resizable()
-            .frame(width: 30, height: 25)
-          Text("20.7K")
-            .font(.footnote)
-        }
-      }
-    }
-    .buttonStyle(.plain)
-    .foregroundStyle(.white)
-    .padding(.trailing, 10)
-  }
-}
-
-struct BottomInformationView: View {
-  @Environment(SessionManager.self) private var session
-  
-  var body: some View {
-    VStack(alignment: .leading, spacing: 20) {
-      HStack {
-        Image(uiImage: base64ToImage(session.user?.avatar ??  "") ?? UIImage())
-          .resizable()
-          .scaledToFill()
-          .frame(width: 55, height: 55)
-          .clipShape(.circle)
-        
-        VStack(alignment: .leading, spacing: 10) {
-          Text((session.user?.fullName ?? "") + " " + (session.user?.nickname ?? ""))
-            .font(.headline.bold().monospaced())
-            .foregroundStyle(.white)
-          Text("Actor & Singer")
-            .foregroundStyle(.gray)
-            .font(.footnote.italic())
-        }
-      }
-      
-      Text("Hi everyone in this video i will sing o song\n&song &music &love &beauty")
-        .font(.footnote.bold())
-      
-      HStack {
-        Image(systemName: "music.note")
-        Text("Following Girl by \(session.user?.nickname ?? "")")
-          .font(.caption.bold().monospaced())
-      }
-    }
-    .foregroundStyle(.gray)
-    .padding(.horizontal)
   }
 }
 
@@ -179,27 +97,6 @@ struct TopTabBar: View {
     }
   }
 }
-
-struct SwappableImageView: View {
-  private let images: [String] = ["scarlet", "thor", "panther"]
-  
-  var body: some View {
-    ScrollView(.vertical) {
-      LazyVStack(spacing: 0) {
-        ForEach(images, id: \..self) { imageName in
-          Image(imageName)
-            .resizable()
-            .scaledToFill()
-            .containerRelativeFrame(.vertical)
-            .scrollTargetLayout()
-        }
-      }
-    }
-    .scrollTargetBehavior(.paging)
-    .ignoresSafeArea()
-  }
-}
-
 
 #Preview {
   HomeView()

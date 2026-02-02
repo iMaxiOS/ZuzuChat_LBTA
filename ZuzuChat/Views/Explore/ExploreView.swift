@@ -100,7 +100,7 @@ private extension ExploreView {
         if vm.searchText.isEmpty {
           ScrollView(.horizontal, showsIndicators: false) {
             VStack(alignment: .leading) {
-              ForEach(sections) { section in
+              ForEach($sections) { section in
                 HStack(spacing: 16) {
                   ForEach(section.categories) { category in
                     CategoryChip(category: category)
@@ -149,6 +149,9 @@ private extension ExploreView {
         }
       }
       .padding(.bottom, 50)
+    }
+    .refreshable {
+      await vm.fetchArticles()
     }
   }
 }

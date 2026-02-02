@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CategoryChip: View {
-  @State var category: CategoryItem
+  @Binding var category: CategoryItem
   
   var body: some View {
     Text("\(category.icon) \(category.title)")

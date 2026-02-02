@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct CategorySection: Identifiable {
+struct CategorySection: Identifiable, Equatable {
   let id = UUID()
   let title: String
   var categories: [CategoryItem]
 }
 
-struct CategoryItem: Identifiable {
+struct CategoryItem: Identifiable, Equatable {
   let id = UUID()
-  let title: String
+  var title: String
   let icon: String
   var isSelected: Bool = false
 }
@@ -26,5 +26,4 @@ struct Movers: Identifiable {
   let title: String
   let percent: String
 }
-
 
